@@ -34,8 +34,8 @@ html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:'Plus Jakarta Sans',sans-serif}
 
-/* ===== ANIMATED PARTICLES CANVAS ===== */
-#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.55}
+/* ===== ANIMATED NATURE CANVAS ===== */
+#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1}
 
 /* ===== PAGE TRANSITION OVERLAY ===== */
 .page-transition{
@@ -571,6 +571,271 @@ tbody td:first-child{color:var(--text3);font-size:11.5px;white-space:nowrap}
 
 /* Number counter animation */
 .stat-value.counting{animation:none}
+
+/* ===== LOG TOOLBAR ===== */
+.log-toolbar{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:16px;flex-wrap:wrap;
+}
+.log-search-wrap{
+  flex:1;min-width:220px;position:relative;
+}
+.log-search-wrap .search-icon{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:13px;pointer-events:none;transition:color 0.2s;
+}
+.log-search-input{
+  width:100%;padding:10px 36px 10px 38px;
+  border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+  background:#f8faff;outline:none;transition:all 0.25s;
+}
+.log-search-input::placeholder{color:var(--text3)}
+.log-search-input:focus{
+  border-color:var(--navy);background:white;
+  box-shadow:0 0 0 3px rgba(13,43,94,0.07);
+}
+.log-search-wrap:has(.log-search-input:focus) .search-icon{color:var(--navy)}
+.log-search-clear{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--text3);
+  font-size:13px;padding:3px;display:none;transition:color 0.2s;line-height:1;
+}
+.log-search-clear:hover{color:var(--red)}
+.log-filter-select{
+  padding:9px 12px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+  background:#f8faff;outline:none;cursor:pointer;transition:all 0.25s;min-width:155px;
+}
+.log-filter-select:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(13,43,94,0.07)}
+.btn-export-excel{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;
+  background:linear-gradient(135deg,#16a34a,#15803d);
+  color:white;border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all 0.25s;white-space:nowrap;
+  box-shadow:0 2px 8px rgba(22,163,74,0.20);
+}
+.btn-export-excel:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(22,163,74,0.35)}
+.btn-export-excel:active{transform:translateY(0)}
+
+/* ===== LOG META BAR ===== */
+.log-meta-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+  padding:9px 14px;
+  background:linear-gradient(90deg,rgba(13,43,94,0.04),transparent);
+  border-radius:var(--radius-xs);
+  margin-bottom:12px;
+}
+.log-meta-count{font-size:12px;color:var(--text3);font-weight:600}
+.log-meta-count strong{color:var(--navy)}
+.log-active-filter{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(13,43,94,0.08);color:var(--navy);
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;
+}
+.log-active-filter button{background:none;border:none;cursor:pointer;color:var(--navy);padding:0;font-size:10px;line-height:1;opacity:0.6;transition:opacity 0.2s}
+.log-active-filter button:hover{opacity:1}
+
+/* ===== TABLE REFINEMENTS ===== */
+.log-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border2);box-shadow:0 2px 12px rgba(13,43,94,0.06)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+  color:white;padding:12px 14px;text-align:left;
+  font-weight:700;font-size:11px;letter-spacing:0.7px;text-transform:uppercase;white-space:nowrap;
+}
+thead th:first-child{border-radius:11px 0 0 0}
+thead th:last-child{border-radius:0 11px 0 0;text-align:center}
+tbody tr{border-bottom:1px solid var(--border2);transition:background 0.15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f0f5ff}
+tbody td{padding:11px 14px;color:var(--text2);vertical-align:middle}
+tbody td:first-child{color:var(--text3);font-size:11.5px;white-space:nowrap}
+tbody td:last-child{text-align:center}
+
+/* Badge — compact pill with tooltip on hover for full text */
+.badge{
+  display:inline-block;
+  padding:3px 10px;border-radius:20px;
+  font-size:11px;font-weight:700;
+  background:rgba(13,43,94,0.08);color:var(--navy);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:160px;vertical-align:middle;
+  cursor:default;
+  position:relative;
+}
+/* Tooltip for truncated badge */
+.badge[title]:hover::after{
+  content:attr(title);
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:var(--navy-dark);color:white;
+  font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;
+  white-space:nowrap;z-index:99;pointer-events:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.25);
+  max-width:260px;white-space:normal;text-align:center;line-height:1.4;
+}
+.badge[title]:hover::before{
+  content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--navy-dark);z-index:99;
+}
+
+/* Row action buttons */
+.btn-preview-row{
+  padding:5px 13px;background:linear-gradient(135deg,#0891b2,#0e7490);
+  color:white;border:none;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;
+  display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;white-space:nowrap;
+  font-family:'DM Sans',sans-serif;
+}
+.btn-preview-row:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(8,145,178,0.38)}
+
+/* ===== PAGINATION ===== */
+.pagination-wrap{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:14px;flex-wrap:wrap;gap:10px;
+  padding-top:14px;border-top:1px solid var(--border2);
+}
+.pagination-info{font-size:12px;color:var(--text3);font-weight:600}
+.pagination-info strong{color:var(--navy)}
+.pagination-btns{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.pg-btn{
+  min-width:32px;height:32px;padding:0 9px;
+  border:1.5px solid var(--border2);border-radius:8px;
+  background:white;color:var(--text2);font-size:12px;font-weight:600;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  transition:all 0.2s;
+}
+.pg-btn:hover:not(:disabled){background:#eef2fa;border-color:var(--navy);color:var(--navy)}
+.pg-btn.active{
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+  border-color:var(--navy);color:white;
+  box-shadow:0 3px 10px rgba(13,43,94,0.25);
+}
+.pg-btn:disabled{opacity:0.38;cursor:not-allowed}
+.pg-btn.pg-ellipsis{cursor:default;border:none;background:none;min-width:20px;color:var(--text3)}
+.pg-btn.pg-ellipsis:hover{background:none;color:var(--text3)}
+.log-perpage-select{
+  padding:6px 10px;border:1.5px solid var(--border2);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);
+  background:white;outline:none;cursor:pointer;transition:all 0.2s;
+}
+.log-perpage-select:focus{border-color:var(--navy)}
+
+/* No result state */
+.no-result-row td{
+  text-align:center;padding:48px 16px;color:var(--text3);
+}
+.no-result-icon{font-size:32px;display:block;margin-bottom:10px;opacity:0.3}
+.no-result-title{font-size:14px;font-weight:700;color:var(--text2);margin-bottom:4px}
+.no-result-sub{font-size:12px}
+
+/* Search highlight */
+.log-search-highlight{
+  background:rgba(201,162,39,0.30);border-radius:3px;
+  padding:0 2px;font-weight:700;color:var(--navy-dark);
+}
+
+/* ===== TIMESTAMP COMPACT ===== */
+.ts-date{font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap}
+.ts-time{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap}
+
+/* ===== DOWNLOAD MODAL ===== */
+.dl-overlay{
+  position:fixed;inset:0;background:rgba(5,15,40,0.55);backdrop-filter:blur(4px);
+  z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.dl-overlay.open{display:flex}
+.dl-modal{
+  background:white;border-radius:20px;width:100%;max-width:480px;
+  box-shadow:0 24px 72px rgba(0,0,0,0.22),0 0 0 1px rgba(255,255,255,0.08);
+  overflow:hidden;animation:dlSlideIn 0.3s cubic-bezier(0.34,1.4,0.64,1) forwards;
+}
+@keyframes dlSlideIn{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:none}}
+.dl-modal-header{
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+  padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.dl-modal-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:18px;flex-shrink:0;
+}
+.dl-modal-title{font-size:16px;font-weight:800;color:white;line-height:1.2}
+.dl-modal-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px}
+.dl-close{
+  background:rgba(255,255,255,0.12);border:none;border-radius:10px;
+  width:32px;height:32px;color:white;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background 0.2s;flex-shrink:0;
+}
+.dl-close:hover{background:rgba(255,255,255,0.25)}
+.dl-modal-body{padding:22px;display:flex;flex-direction:column;gap:18px}
+.dl-field-group{display:flex;flex-direction:column;gap:6px}
+.dl-label{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:0.4px;text-transform:uppercase}
+/* Format cards */
+.dl-format-row{display:flex;gap:10px}
+.dl-format-card{
+  flex:1;border:2px solid var(--border2);border-radius:12px;
+  padding:12px 10px;cursor:pointer;transition:all 0.2s;
+  display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+  position:relative;
+}
+.dl-format-card:has(input:checked){border-color:var(--navy);background:#f0f5ff;box-shadow:0 0 0 3px rgba(13,43,94,0.1)}
+.dl-format-card input{position:absolute;opacity:0;pointer-events:none}
+.dl-format-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.dl-format-name{font-size:13px;font-weight:700;color:var(--text)}
+.dl-format-desc{font-size:11px;color:var(--text3);line-height:1.4}
+/* Select */
+.dl-select{
+  padding:10px 14px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+  background:#f8faff;outline:none;cursor:pointer;width:100%;transition:all 0.2s;
+}
+.dl-select:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(13,43,94,0.07)}
+.dl-hint{font-size:12px;color:var(--text3);font-weight:600}
+.dl-hint strong{color:var(--navy)}
+/* Password */
+.dl-pass-wrap{position:relative}
+.dl-input{
+  width:100%;padding:10px 42px 10px 14px;
+  border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+  background:#f8faff;outline:none;transition:all 0.2s;
+}
+.dl-input:focus{border-color:var(--navy);background:white;box-shadow:0 0 0 3px rgba(13,43,94,0.07)}
+.dl-input.error{border-color:var(--red);background:#fff5f5}
+.dl-eye{
+  position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--text3);
+  font-size:14px;padding:3px;transition:color 0.2s;
+}
+.dl-eye:hover{color:var(--navy)}
+.dl-error{font-size:12px;color:var(--red);font-weight:600;min-height:16px;margin-top:4px}
+/* Footer */
+.dl-modal-footer{
+  padding:16px 22px;border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;
+  background:#fafbff;
+}
+.dl-btn-cancel{
+  padding:10px 20px;background:white;border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all 0.2s;
+}
+.dl-btn-cancel:hover{border-color:var(--navy);color:var(--navy);background:#f0f5ff}
+.dl-btn-download{
+  padding:10px 22px;
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+  color:white;border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+  transition:all 0.2s;box-shadow:0 3px 12px rgba(13,43,94,0.25);
+}
+.dl-btn-download:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(13,43,94,0.35)}
+.dl-btn-download:active{transform:none}
 </style>
 </head>
 <body>
@@ -1068,39 +1333,173 @@ tbody td:first-child{color:var(--text3);font-size:11.5px;white-space:nowrap}
         <!-- ===== TAB LOG ===== -->
         <div id="tabLog" style="display:none">
           <div class="section-card">
-            <div class="section-header">
+
+            <!-- Header -->
+            <div class="section-header" style="margin-bottom:18px">
               <div class="section-icon"><i class="fas fa-history"></i></div>
               <div style="flex:1">
                 <div class="section-title">Log Aktivitas</div>
-                <div class="section-sub">Data kunjungan yang telah diinput — klik Preview untuk melihat detail</div>
+                <div class="section-sub">Riwayat seluruh data kunjungan yang telah diinput ke sistem</div>
               </div>
-              <button onclick="loadData(true)" style="padding:9px 16px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:white;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;font-family:'DM Sans',sans-serif" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
-                <i class="fas fa-sync-alt"></i> Refresh
-              </button>
+              <div style="display:flex;gap:8px;flex-shrink:0">
+                <button onclick="openDownloadModal()" class="btn-export-excel" title="Unduh data Log Aktivitas">
+                  <i class="fas fa-download"></i> Unduh Data
+                </button>
+                <button onclick="loadData(true)" style="padding:9px 15px;background:rgba(13,43,94,0.08);color:var(--navy);border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;font-family:'DM Sans',sans-serif" onmouseover="this.style.background='rgba(13,43,94,0.14)'" onmouseout="this.style.background='rgba(13,43,94,0.08)'">
+                  <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+              </div>
             </div>
-            <div id="logCountBar" style="margin-bottom:14px;font-size:12px;color:var(--text3);font-weight:600"></div>
+
+            <!-- Toolbar: Search + Filter Kecamatan -->
+            <div class="log-toolbar">
+              <div class="log-search-wrap">
+                <i class="fas fa-search search-icon"></i>
+                <input class="log-search-input" id="logSearchInput"
+                  type="text" placeholder="Cari nama petugas, nama PPKS, NIK, kecamatan..."
+                  oninput="onLogSearch(this)">
+                <button class="log-search-clear" id="logSearchClear" title="Hapus pencarian" onclick="clearLogSearch()">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              </div>
+              <select class="log-filter-select" id="logFilterKec" onchange="renderLog()">
+                <option value="">Semua Kecamatan</option>
+                <option>Air Periukan</option><option>Ilir Talo</option>
+                <option>Lubuk Sandi</option><option>Sukaraja</option>
+                <option>Seluma</option><option>Seluma Barat</option>
+                <option>Seluma Selatan</option><option>Seluma Timur</option>
+                <option>Seluma Utara</option><option>Semidang Alas</option>
+                <option>Semidang Alas Maras</option><option>Talo</option>
+                <option>Talo Kecil</option><option>Ulu Talo</option>
+              </select>
+            </div>
+
+            <!-- Meta bar: count info + active filter chips -->
+            <div class="log-meta-bar">
+              <div class="log-meta-count" id="logCountBar"></div>
+              <div id="logActiveFilters" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+            </div>
+
+            <!-- Table -->
             <div class="log-table-wrap">
               <table>
                 <thead><tr>
-                  <th>Waktu</th>
+                  <th style="width:120px">Waktu</th>
                   <th>Nama Petugas</th>
                   <th>Jabatan</th>
                   <th>Nama PPKS</th>
-                  <th>Jenis PPKS</th>
-                  <th>Kecamatan</th>
-                  <th>Aksi</th>
+                  <th style="width:170px">Jenis PPKS</th>
+                  <th style="width:130px">Kecamatan</th>
+                  <th style="width:80px">Aksi</th>
                 </tr></thead>
                 <tbody id="logBody">
-                  <tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text3)">Belum ada data</td></tr>
+                  <tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text3)">Belum ada data</td></tr>
                 </tbody>
               </table>
             </div>
+
+            <!-- Pagination footer -->
+            <div class="pagination-wrap" id="paginationWrap">
+              <div class="pagination-info" id="paginationInfo"></div>
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-size:12px;color:var(--text3);font-weight:600">Tampilkan:</span>
+                  <select class="log-perpage-select" id="logPerPage" onchange="onPerPageChange(this)">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  <span style="font-size:12px;color:var(--text3);font-weight:600">baris</span>
+                </div>
+                <div class="pagination-btns" id="paginationBtns"></div>
+              </div>
+            </div>
+
           </div>
         </div>
 
       </main>
     </div>
   </div>
+
+<!-- ===== MODAL UNDUH DATA ===== -->
+<div id="downloadModalOverlay" class="dl-overlay" onclick="if(event.target===this)closeDownloadModal()">
+  <div class="dl-modal">
+
+    <!-- Header -->
+    <div class="dl-modal-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="dl-modal-icon"><i class="fas fa-download"></i></div>
+        <div>
+          <div class="dl-modal-title">Unduh Data Log Aktivitas</div>
+          <div class="dl-modal-sub">Pilih format, filter kecamatan, dan masukkan password</div>
+        </div>
+      </div>
+      <button class="dl-close" onclick="closeDownloadModal()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="dl-modal-body">
+
+      <!-- Format pilihan -->
+      <div class="dl-field-group">
+        <label class="dl-label"><i class="fas fa-file-alt" style="color:var(--navy);margin-right:6px"></i>Format File</label>
+        <div class="dl-format-row">
+          <label class="dl-format-card" id="dlFmtExcelCard">
+            <input type="radio" name="dlFormat" value="excel" checked onchange="updateDlFormatCard()">
+            <span class="dl-format-icon" style="background:#dcfce7;color:#16a34a"><i class="fas fa-file-excel"></i></span>
+            <span class="dl-format-name">Excel (CSV)</span>
+            <span class="dl-format-desc">Cocok untuk diolah<br>di Microsoft Excel</span>
+          </label>
+          <label class="dl-format-card" id="dlFmtPdfCard">
+            <input type="radio" name="dlFormat" value="pdf" onchange="updateDlFormatCard()">
+            <span class="dl-format-icon" style="background:#fee2e2;color:#dc2626"><i class="fas fa-file-pdf"></i></span>
+            <span class="dl-format-name">PDF</span>
+            <span class="dl-format-desc">Siap cetak &amp;<br>arsip dokumen</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Cakupan data -->
+      <div class="dl-field-group">
+        <label class="dl-label"><i class="fas fa-map-marked-alt" style="color:var(--navy);margin-right:6px"></i>Cakupan Data</label>
+        <select class="dl-select" id="dlKecFilter">
+          <option value="">Semua Kecamatan</option>
+          <option>Air Periukan</option><option>Ilir Talo</option>
+          <option>Lubuk Sandi</option><option>Sukaraja</option>
+          <option>Seluma</option><option>Seluma Barat</option>
+          <option>Seluma Selatan</option><option>Seluma Timur</option>
+          <option>Seluma Utara</option><option>Semidang Alas</option>
+          <option>Semidang Alas Maras</option><option>Talo</option>
+          <option>Talo Kecil</option><option>Ulu Talo</option>
+        </select>
+        <div class="dl-hint" id="dlDataCount" style="margin-top:7px"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="dl-field-group">
+        <label class="dl-label"><i class="fas fa-lock" style="color:var(--navy);margin-right:6px"></i>Password</label>
+        <div class="dl-pass-wrap">
+          <input class="dl-input" type="password" id="dlPassword" placeholder="Masukkan password untuk mengunduh" autocomplete="off">
+          <button class="dl-eye" type="button" onclick="toggleDlPass(this)" title="Tampilkan/sembunyikan">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="dl-error" id="dlPassError"></div>
+      </div>
+
+    </div>
+
+    <!-- Footer actions -->
+    <div class="dl-modal-footer">
+      <button class="dl-btn-cancel" onclick="closeDownloadModal()">Batal</button>
+      <button class="dl-btn-download" id="dlBtnSubmit" onclick="processDownload()">
+        <i class="fas fa-download"></i> Unduh Sekarang
+      </button>
+    </div>
+
+  </div>
+</div>
 
   <footer class="footer">
     <strong>Bidang Penanganan Fakir Miskin dan Pemberdayaan Sosial</strong><br>
@@ -1115,60 +1514,460 @@ tbody td:first-child{color:var(--text3);font-size:11.5px;white-space:nowrap}
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJZ3eo8CpNbFIe8YKjpN1Lk9uKu1SIy2Enxxv93uNqD-5YTLg_c4OpNE2faJXSaqW4sg/exec";
 const CRED = {u:"adminsosial", p:"seluma321"};
 
-// ===== PARTICLES ANIMATION =====
+// ===== DAYTIME NATURE + 3D BIRDS BACKGROUND =====
 (function(){
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
-  let particles = [];
   let W, H;
+
   function resize(){
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
   }
   resize();
   window.addEventListener('resize', resize);
-  for(let i=0;i<55;i++){
-    particles.push({
-      x:Math.random()*window.innerWidth,
-      y:Math.random()*window.innerHeight,
-      r:Math.random()*2+0.5,
-      vx:(Math.random()-0.5)*0.3,
-      vy:(Math.random()-0.5)*0.3,
-      opacity:Math.random()*0.5+0.1,
-      color:Math.random()>0.7?'201,162,39':'13,43,94'
-    });
+
+  /* ================================================
+     SKY GRADIENT — bright dawn-to-noon blue
+  ================================================ */
+  function drawSky(){
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0,    'rgba(10, 60,150,0.88)');   // deep blue zenith
+    g.addColorStop(0.30, 'rgba(30,100,210,0.75)');
+    g.addColorStop(0.60, 'rgba(80,160,240,0.55)');
+    g.addColorStop(0.82, 'rgba(180,220,255,0.30)');  // horizon haze
+    g.addColorStop(1,    'rgba(220,235,255,0.10)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
   }
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0||p.x>W)p.vx*=-1;
-      if(p.y<0||p.y>H)p.vy*=-1;
+
+  /* ================================================
+     SUN — glowing disc with layered halo + rays
+  ================================================ */
+  function drawSun(t){
+    // sun drifts very slowly left→right over 3 min cycle
+    const cycle = (t * 0.000018) % 1;           // 0..1 over ~55 s
+    const sx = W * (0.12 + cycle * 0.76);        // travels across sky
+    const sy = H * (0.14 - 0.06 * Math.sin(Math.PI * cycle)); // arc
+
+    // outer atmospheric glow layers
+    const haloDefs = [
+      {r: 260, a: 0.04, color:'255,220,100'},
+      {r: 180, a: 0.07, color:'255,230,120'},
+      {r: 110, a: 0.12, color:'255,240,150'},
+      {r:  65, a: 0.20, color:'255,248,180'},
+      {r:  38, a: 0.45, color:'255,252,210'},
+    ];
+    haloDefs.forEach(({r, a, color}) => {
+      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r);
+      g.addColorStop(0,   `rgba(${color},${a})`);
+      g.addColorStop(0.6, `rgba(${color},${a * 0.3})`);
+      g.addColorStop(1,   `rgba(${color},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
+    });
+
+    // sun disc
+    const disc = ctx.createRadialGradient(sx - 4, sy - 4, 1, sx, sy, 24);
+    disc.addColorStop(0,   'rgba(255,255,240,1.0)');
+    disc.addColorStop(0.5, 'rgba(255,248,160,1.0)');
+    disc.addColorStop(1,   'rgba(255,220, 60,0.9)');
+    ctx.fillStyle = disc;
+    ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2); ctx.fill();
+
+    // corona bright core
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.beginPath(); ctx.arc(sx, sy, 11, 0, Math.PI*2); ctx.fill();
+
+    // light rays (12 spokes, slowly rotating)
+    const rot = t * 0.00006;
+    ctx.save();
+    ctx.translate(sx, sy);
+    ctx.rotate(rot);
+    for(let i = 0; i < 12; i++){
+      const ang = (i / 12) * Math.PI * 2;
+      const len = (i % 2 === 0) ? 65 : 40;
+      const pulse = 1 + 0.12 * Math.sin(t * 0.003 + i);
+      ctx.save();
+      ctx.rotate(ang);
+      ctx.globalAlpha = 0.18 * pulse;
+      ctx.strokeStyle = 'rgba(255,245,150,1)';
+      ctx.lineWidth   = i % 2 === 0 ? 2.2 : 1.2;
+      ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${p.color},${p.opacity})`;
+      ctx.moveTo(28, 0);
+      ctx.lineTo(28 + len * pulse, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // sun→ground light shaft
+    ctx.save();
+    ctx.globalAlpha = 0.025 + 0.010 * Math.sin(t * 0.0008);
+    const shaft = ctx.createLinearGradient(sx, sy, sx + 20, H);
+    shaft.addColorStop(0, 'rgba(255,245,160,0.8)');
+    shaft.addColorStop(1, 'rgba(255,245,160,0)');
+    ctx.fillStyle = shaft;
+    ctx.beginPath();
+    ctx.moveTo(sx - 15, sy + 30);
+    ctx.lineTo(sx - 80, H);
+    ctx.lineTo(sx + 100, H);
+    ctx.lineTo(sx + 15, sy + 30);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    return {sx, sy};  // return for cloud/bird awareness
+  }
+
+  /* ================================================
+     CLOUDS — three parallax layers, white & fluffy
+  ================================================ */
+  // Pre-baked cloud shapes: list of puff offsets per cloud
+  function makeCloudShape(W, H){
+    return [
+      {ox: 0,      oy: 0,     rx: W*0.40, ry: H*0.55},
+      {ox:-W*0.28, oy: H*0.12,rx: W*0.30, ry: H*0.44},
+      {ox: W*0.28, oy: H*0.12,rx: W*0.30, ry: H*0.44},
+      {ox:-W*0.45, oy: H*0.28,rx: W*0.22, ry: H*0.34},
+      {ox: W*0.45, oy: H*0.28,rx: W*0.22, ry: H*0.34},
+      {ox:-W*0.15, oy:-H*0.18,rx: W*0.26, ry: H*0.36},
+      {ox: W*0.15, oy:-H*0.20,rx: W*0.24, ry: H*0.34},
+    ];
+  }
+
+  const cloudRows = [
+    // [yFrac, speedMult, alpha, scale, count]
+    { yFrac:0.10, speed:0.000014, alpha:0.55, scale:0.80, clouds:[
+        {px:0.05},{px:0.42},{px:0.78}
+    ]},
+    { yFrac:0.18, speed:0.000022, alpha:0.65, scale:1.00, clouds:[
+        {px:0.18},{px:0.58},{px:0.88}
+    ]},
+    { yFrac:0.26, speed:0.000035, alpha:0.50, scale:0.70, clouds:[
+        {px:0.03},{px:0.35},{px:0.65},{px:0.92}
+    ]},
+  ];
+
+  function drawCloudAt(cx, cy, W, H, alpha){
+    const puffs = makeCloudShape(W, H);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    puffs.forEach(p => {
+      const g = ctx.createRadialGradient(cx+p.ox, cy+p.oy, 0, cx+p.ox, cy+p.oy, Math.max(p.rx,p.ry));
+      g.addColorStop(0,   'rgba(255,255,255,0.92)');
+      g.addColorStop(0.45,'rgba(240,248,255,0.70)');
+      g.addColorStop(0.80,'rgba(220,235,255,0.25)');
+      g.addColorStop(1,   'rgba(200,220,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(cx+p.ox, cy+p.oy, p.rx, p.ry, 0, 0, Math.PI*2);
       ctx.fill();
     });
-    // draw connecting lines
-    for(let i=0;i<particles.length;i++){
-      for(let j=i+1;j<particles.length;j++){
-        const dx=particles[i].x-particles[j].x;
-        const dy=particles[i].y-particles[j].y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<130){
-          ctx.beginPath();
-          ctx.strokeStyle=`rgba(13,43,94,${0.08*(1-dist/130)})`;
-          ctx.lineWidth=0.5;
-          ctx.moveTo(particles[i].x,particles[i].y);
-          ctx.lineTo(particles[j].x,particles[j].y);
-          ctx.stroke();
-        }
+    // bottom shadow
+    const sh = ctx.createLinearGradient(cx, cy, cx, cy + H*0.5);
+    sh.addColorStop(0,'rgba(160,185,220,0)');
+    sh.addColorStop(0.6,'rgba(160,185,220,0.18)');
+    sh.addColorStop(1,'rgba(160,185,220,0)');
+    ctx.fillStyle = sh;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + H*0.25, W*0.45, H*0.28, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawClouds(t){
+    cloudRows.forEach(row => {
+      const cW = 240 * row.scale, cH = 55 * row.scale;
+      row.clouds.forEach(c => {
+        const x = ((c.px + row.speed * t) % 1.2 - 0.1) * W;
+        drawCloudAt(x, row.yFrac * H, cW, cH, row.alpha);
+      });
+    });
+  }
+
+  /* ================================================
+     MOUNTAINS — 3 parallax layers with sun tinting
+  ================================================ */
+  function drawMountains(t, sx){
+    const drift = Math.sin(t * 0.00003) * 5;
+
+    // Layer 1: farthest — pale blue silhouette
+    ctx.save(); ctx.globalAlpha = 0.20;
+    ctx.beginPath();
+    ctx.moveTo(0, H*0.78);
+    [0.04,0.14,0.22,0.33,0.45,0.57,0.68,0.80,0.90,1.00].forEach((xf,i) => {
+      const ys = [0.54,0.65,0.46,0.62,0.42,0.60,0.44,0.62,0.48,0.52];
+      ctx.lineTo(xf*W, ys[i]*H);
+    });
+    ctx.lineTo(W,H*0.78); ctx.closePath();
+    const m1g = ctx.createLinearGradient(sx||W*0.5, H*0.42, 0, H*0.78);
+    m1g.addColorStop(0,'rgba(100,160,230,0.85)');
+    m1g.addColorStop(1,'rgba(60,110,180,0.60)');
+    ctx.fillStyle = m1g; ctx.fill();
+    ctx.restore();
+
+    // Layer 2: mid — deeper blue-green
+    ctx.save(); ctx.globalAlpha = 0.28;
+    ctx.beginPath();
+    ctx.moveTo(0, H*0.84);
+    [0.00,0.10,0.20,0.30,0.42,0.53,0.64,0.74,0.85,0.94,1.0].forEach((xf,i) => {
+      const ys = [0.66,0.72,0.58,0.70,0.55,0.68,0.56,0.70,0.58,0.72,0.65];
+      ctx.lineTo(xf*W + drift, ys[i]*H);
+    });
+    ctx.lineTo(W,H*0.84); ctx.closePath();
+    const m2g = ctx.createLinearGradient(sx||W*0.5, H*0.54, 0, H*0.84);
+    m2g.addColorStop(0,'rgba(40,90,160,0.95)');
+    m2g.addColorStop(1,'rgba(20,55,120,0.80)');
+    ctx.fillStyle = m2g; ctx.fill();
+    ctx.restore();
+
+    // Layer 3: near hills — dark
+    ctx.save(); ctx.globalAlpha = 0.38;
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    ctx.bezierCurveTo(W*0.12, H*0.80, W*0.25, H*0.74, W*0.38, H*0.84);
+    ctx.bezierCurveTo(W*0.50, H*0.73, W*0.62, H*0.68, W*0.72, H*0.78);
+    ctx.bezierCurveTo(W*0.82, H*0.68, W*0.91, H*0.75, W, H*0.80);
+    ctx.lineTo(W, H); ctx.closePath();
+    const m3g = ctx.createLinearGradient(0, H*0.68, 0, H);
+    m3g.addColorStop(0,'rgba(15,40,90,0.98)');
+    m3g.addColorStop(1,'rgba(8,22,55,1.0)');
+    ctx.fillStyle = m3g; ctx.fill();
+    ctx.restore();
+  }
+
+  /* ================================================
+     TREES — silhouette forest foreground
+  ================================================ */
+  function drawTree(x, baseY, height, spread, alpha){
+    ctx.save(); ctx.globalAlpha = alpha;
+    ctx.fillStyle = 'rgba(4,11,32,1)';
+    // trunk
+    ctx.fillRect(x - spread*0.045, baseY - height*0.28, spread*0.09, height*0.28);
+    // 3 triangular foliage tiers
+    [[0, 0, 1.0],[0.20, 0.26, 0.82],[0.38, 0.48, 0.65]].forEach(([yFr, yOff, sc]) => {
+      ctx.beginPath();
+      ctx.moveTo(x, baseY - height*(yFr + yOff));
+      ctx.lineTo(x - spread*sc*0.52, baseY - height*yFr + height*0.25*sc);
+      ctx.lineTo(x + spread*sc*0.52, baseY - height*yFr + height*0.25*sc);
+      ctx.closePath(); ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  const TREES = [
+    // left edge
+    {x:0.000,h:0.26,w:58},{x:0.038,h:0.30,w:52},{x:0.072,h:0.23,w:45},
+    {x:0.108,h:0.28,w:55},{x:0.142,h:0.22,w:44},{x:0.175,h:0.25,w:50},
+    // right edge
+    {x:0.790,h:0.24,w:50},{x:0.825,h:0.29,w:56},{x:0.858,h:0.22,w:44},
+    {x:0.892,h:0.27,w:52},{x:0.928,h:0.21,w:42},{x:0.962,h:0.25,w:48},
+    {x:1.000,h:0.23,w:46},
+  ];
+  function drawForest(){
+    TREES.forEach(tr => drawTree(tr.x * W, H * 0.968, H * tr.h, tr.w, 0.90));
+  }
+
+  /* ================================================
+     BIRDS — clear, detailed, 3D-depth flock system
+     Uses realistic body + two curved wings + tail
+  ================================================ */
+  const FLOCK_COUNT = 7;
+  const flocks = [];
+
+  function makeFlock(id){
+    const z    = 0.2 + Math.random() * 0.8;     // 0=far, 1=near
+    const spd  = (0.00008 + Math.random()*0.00012) * (0.4 + z * 1.0);
+    const yPos = 0.07 + Math.random() * 0.38;   // vertical start
+    const count = 5 + Math.floor(Math.random() * 10);
+    // V-formation or scattered
+    const formation = Math.random() > 0.4 ? 'v' : 'scatter';
+    const birds = Array.from({length: count}, (_, bi) => {
+      let ox = 0, oy = 0;
+      if(formation === 'v'){
+        const side = bi % 2 === 0 ? 1 : -1;
+        const rank = Math.floor(bi / 2);
+        ox = side * rank * (0.022 + z * 0.012);
+        oy = rank * 0.014 + (bi === 0 ? 0 : 0.008);
+      } else {
+        ox = (Math.random()-0.5) * 0.08;
+        oy = Math.random() * 0.06;
       }
+      return {
+        ox, oy,
+        wingPhase: Math.random() * Math.PI * 2,
+        wingSpeed: 0.055 + Math.random() * 0.045,  // fast realistic flap
+        bobPhase:  Math.random() * Math.PI * 2,
+        size:      0.75 + Math.random() * 0.5,
+      };
+    });
+    return {
+      id,
+      x: -0.18 - Math.random() * 0.15,
+      y: yPos,
+      z,
+      spd,
+      waveAmp:  0.00006 + Math.random() * 0.00008,
+      waveFreq: 0.00025 + Math.random() * 0.00030,
+      waveOff:  Math.random() * Math.PI * 2,
+      birds,
+      formation,
+    };
+  }
+  for(let i = 0; i < FLOCK_COUNT; i++){
+    flocks.push(makeFlock(i));
+    // stagger starting positions
+    flocks[i].x = -0.18 + (i / FLOCK_COUNT) * 1.3;
+  }
+
+  /* Draw one bird: body + two curved wings + small tail
+     cx,cy = body center
+     wingAngle = 0..PI (0=fully down, PI/2=level, PI=fully up)
+     scale = pixel size of wing span half
+     depth = 0..1 for color/alpha
+  */
+  function drawOneBird(cx, cy, wingAngle, scale, depth){
+    const ws  = scale;                       // half-wingspan in px
+    const bw  = ws * 0.18;                   // body half-width
+    const bh  = ws * 0.45;                   // body half-height
+
+    // ---- depth-based styling ----
+    const nearness = Math.pow(depth, 0.6);   // gamma for perceived distance
+    const bodyAlpha  = 0.35 + nearness * 0.60;
+    const wingAlpha  = 0.50 + nearness * 0.45;
+    const lw = 0.8 + nearness * 2.2;        // line width
+
+    // colour: far=pale steel blue, near=dark charcoal with blue tint
+    const r = Math.round(30  + (1-nearness)*130);
+    const g = Math.round(45  + (1-nearness)*130);
+    const b = Math.round(80  + (1-nearness)*100);
+    const bodyColor  = `rgba(${r},${g},${b},${bodyAlpha})`;
+    const wingColor  = `rgba(${r+20},${g+20},${b+10},${wingAlpha})`;
+
+    // ---- wing arc ----
+    // upstroke: tips go up; downstroke: tips curve down naturally
+    const tipY  = -Math.sin(wingAngle) * ws * 0.65;   // vertical tip displacement
+    const midY  = -Math.sin(wingAngle) * ws * 0.35;   // mid-wing bow
+
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = wingColor;
+    ctx.lineWidth   = lw;
+
+    // left wing
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(cx - ws*0.50, cy + midY, cx - ws, cy + tipY);
+    ctx.stroke();
+
+    // right wing
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(cx + ws*0.50, cy + midY, cx + ws, cy + tipY);
+    ctx.stroke();
+
+    // ---- body (small oval) ----
+    if(scale > 6){   // only draw body if big enough to see
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, bw, bh, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // head
+      const headR = bw * 0.85;
+      ctx.beginPath();
+      ctx.arc(cx, cy - bh*0.75, headR, 0, Math.PI*2);
+      ctx.fill();
+
+      // beak (tiny line forward in flight direction)
+      if(scale > 10){
+        ctx.strokeStyle = wingColor;
+        ctx.lineWidth = lw * 0.7;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - bh*0.75);
+        ctx.lineTo(cx + ws * 0.12, cy - bh*0.72);
+        ctx.stroke();
+      }
+
+      // tail
+      ctx.beginPath();
+      ctx.moveTo(cx - bw*0.5, cy + bh*0.7);
+      ctx.lineTo(cx,          cy + bh*1.25);
+      ctx.lineTo(cx + bw*0.5, cy + bh*0.7);
+      ctx.fillStyle = bodyColor;
+      ctx.fill();
     }
+
+    ctx.restore();
+  }
+
+  function drawFlocks(t){
+    // painter's algorithm: draw far flocks first
+    flocks.sort((a,b) => a.z - b.z);
+
+    flocks.forEach(flock => {
+      // advance flock horizontally + gentle sine-wave vertical drift
+      flock.x += flock.spd;
+      const wave = Math.sin(t * flock.waveFreq + flock.waveOff) * flock.waveAmp;
+      flock.y   = Math.max(0.04, Math.min(0.50, flock.y + wave));
+
+      // wrap around when off right edge
+      if(flock.x > 1.30){
+        const fresh = makeFlock(flock.id);
+        Object.assign(flock, fresh);
+        flock.x = -0.18;
+        flock.y = 0.07 + Math.random() * 0.38;
+      }
+
+      // scale wingspan by depth (z) and viewport height
+      const baseScale  = (6 + flock.z * 28) * (H / 700);
+
+      flock.birds.forEach(bird => {
+        // individual vertical bob
+        bird.bobPhase += 0.012;
+        const bobY = Math.sin(bird.bobPhase) * (baseScale * 0.15);
+
+        const bx = (flock.x + bird.ox) * W;
+        const by = (flock.y + bird.oy) * H + bobY;
+
+        // skip birds outside viewport with small margin
+        if(bx < -80 || bx > W+80 || by < -30 || by > H*0.62) return;
+
+        // wing flap
+        bird.wingPhase += bird.wingSpeed;
+        // natural flap: sinusoidal, fast on downstroke
+        const rawFlap = Math.sin(bird.wingPhase);
+        const wingAngle = Math.PI * 0.5 + rawFlap * Math.PI * 0.42;
+
+        drawOneBird(bx, by, wingAngle, baseScale * bird.size, flock.z);
+      });
+    });
+  }
+
+  /* ================================================
+     MAIN RENDER LOOP
+  ================================================ */
+  let t0 = null;
+  function draw(ts){
+    if(!t0) t0 = ts;
+    const t = ts - t0;
+
+    ctx.clearRect(0, 0, W, H);
+
+    drawSky();
+    const sunPos = drawSun(t);
+    drawClouds(t);
+    drawMountains(t, sunPos.sx);
+    drawForest();
+    drawFlocks(t);
+
     requestAnimationFrame(draw);
   }
-  draw();
-})();
+  requestAnimationFrame(draw);
+})()
 
 // ===== PAGE TRANSITION =====
 function runPageTransition(cb){
@@ -1462,7 +2261,7 @@ function switchTab(name,el){
   tabEl.style.animation='';
   el.classList.add('active');
   if(name==='dashboard'){renderCharts();animateStats()}
-  if(name==='log'){renderLog()}
+  if(name==='log'){logCurrentPage=1;renderLog()}
 }
 
 // ===== GPS =====
@@ -1779,28 +2578,448 @@ function renderPieChart(data){
   });
 }
 
-// ===== LOG =====
-function renderLog(){
-  const data=getLocalData();
-  const tb=document.getElementById('logBody');
-  const countBar=document.getElementById('logCountBar');
-  if(countBar) countBar.innerHTML=`Menampilkan <strong>${data.length}</strong> data &mdash; klik <strong>Preview</strong> untuk melihat detail data`;
-  if(!data.length){
-    tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3)"><i class="fas fa-inbox" style="font-size:28px;display:block;margin-bottom:10px;opacity:0.4"></i>Belum ada data</td></tr>';
+// ===== LOG (Search + Pagination + Export) =====
+let logCurrentPage = 1;
+let logPerPage = 25;
+let logFilteredData = [];
+
+function highlightText(text, query) {
+  if (!query || !text) return text || '-';
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp('(' + escaped + ')', 'gi');
+  return String(text).replace(re, '<mark class="log-search-highlight">$1</mark>');
+}
+
+// Abbreviate long jenis PPKS labels to their parenthetical acronym if present,
+// or to a short fixed form; full text is kept in the title attribute for tooltip.
+function shortJenis(label) {
+  if (!label) return '-';
+  // Extract acronym in parentheses: e.g. "Anak Jalanan (ABH)" → "ABH"
+  const m = label.match(/\(([^)]+)\)\s*$/);
+  if (m) return m[1];
+  // Long labels without acronym — truncate sensibly
+  if (label.length <= 22) return label;
+  return label.slice(0, 20) + '…';
+}
+
+function getFilteredLogData() {
+  const allData = getLocalData();
+  const query = (document.getElementById('logSearchInput')?.value || '').trim().toLowerCase();
+  const kecFilter = (document.getElementById('logFilterKec')?.value || '');
+
+  const result = [];
+  allData.forEach((d, idx) => {
+    // Kecamatan filter
+    if (kecFilter && (d.kecamatan || '').trim().toLowerCase() !== kecFilter.trim().toLowerCase()) return;
+    // Text search
+    if (query) {
+      const haystack = [
+        d.timestamp, d.nama_petugas, d.jabatan,
+        d.nik, d.nama_ppks, d.jenis_kelamin,
+        d.kecamatan, d.desa, d.jenis_ppks, d.alamat
+      ].map(v => (v || '').toLowerCase()).join(' ');
+      if (!haystack.includes(query)) return;
+    }
+    result.push({ d, idx });
+  });
+  return result;
+}
+
+function renderLog() {
+  const query = (document.getElementById('logSearchInput')?.value || '').trim();
+  const kecFilter = document.getElementById('logFilterKec')?.value || '';
+  logFilteredData = getFilteredLogData();
+  const total = logFilteredData.length;
+  const allTotal = getLocalData().length;
+
+  // Meta count bar
+  const countBar = document.getElementById('logCountBar');
+  if (countBar) {
+    if (query || kecFilter) {
+      countBar.innerHTML = `Menampilkan <strong>${total}</strong> dari <strong>${allTotal}</strong> data`;
+    } else {
+      countBar.innerHTML = `Total <strong>${allTotal}</strong> data kunjungan`;
+    }
+  }
+
+  // Active filter chips
+  const chipsEl = document.getElementById('logActiveFilters');
+  if (chipsEl) {
+    let chips = '';
+    if (query) {
+      chips += `<span class="log-active-filter"><i class="fas fa-search" style="font-size:10px"></i> "${query}" <button onclick="clearLogSearch()" title="Hapus">✕</button></span>`;
+    }
+    if (kecFilter) {
+      chips += `<span class="log-active-filter"><i class="fas fa-map-marker-alt" style="font-size:10px"></i> ${kecFilter} <button onclick="document.getElementById('logFilterKec').value='';renderLog();" title="Hapus">✕</button></span>`;
+    }
+    chipsEl.innerHTML = chips;
+  }
+
+  const tb = document.getElementById('logBody');
+  if (!total) {
+    if (!allTotal) {
+      tb.innerHTML = `<tr><td colspan="7" class="no-result-row">
+        <i class="fas fa-inbox no-result-icon"></i>
+        <div class="no-result-title">Belum ada data</div>
+        <div class="no-result-sub">Mulai input laporan kunjungan pada tab Input</div>
+      </td></tr>`;
+    } else {
+      tb.innerHTML = `<tr><td colspan="7" class="no-result-row">
+        <i class="fas fa-search no-result-icon"></i>
+        <div class="no-result-title">Data tidak ditemukan</div>
+        <div class="no-result-sub">Coba ubah kata kunci atau hapus filter yang aktif</div>
+      </td></tr>`;
+    }
+    renderPagination(0);
     return;
   }
-  tb.innerHTML=data.map((d,i)=>`
-    <tr>
-      <td>${d.timestamp||'-'}</td>
-      <td><strong>${d.nama_petugas||'-'}</strong></td>
-      <td><span style="font-size:12px;color:var(--text2)">${d.jabatan||'-'}</span></td>
-      <td>${d.nama_ppks||'-'}<div style="font-size:11px;color:var(--text3);margin-top:2px"><i class="fas fa-map-marker-alt" style="font-size:10px"></i> ${d.desa||''}, ${d.kecamatan||''}</div></td>
-      <td><span class="badge">${d.jenis_ppks||'-'}</span></td>
-      <td>${d.kecamatan||'-'}</td>
-      <td style="white-space:nowrap">
-        <button class="btn-preview-row" onclick="openPreviewModal(${i})"><i class="fas fa-eye"></i> Preview</button>
+
+  // Clamp page
+  const totalPages = Math.ceil(total / logPerPage);
+  if (logCurrentPage > totalPages) logCurrentPage = totalPages;
+  if (logCurrentPage < 1) logCurrentPage = 1;
+
+  const start = (logCurrentPage - 1) * logPerPage;
+  const end = Math.min(start + logPerPage, total);
+  const pageSlice = logFilteredData.slice(start, end);
+
+  tb.innerHTML = pageSlice.map(({ d, idx }) => {
+    // Format timestamp: hari Indonesia + jam
+    let tsHtml = '-';
+    if (d.timestamp) {
+      // Try parsing: supports "DD/MM/YYYY HH:MM:SS", "YYYY-MM-DD HH:MM:SS", ISO, etc.
+      let dtObj = null;
+      const raw = d.timestamp.trim();
+      // DD/MM/YYYY HH:MM:SS  or  DD/MM/YYYY HH:MM
+      const m1 = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})/);
+      if (m1) {
+        dtObj = new Date(+m1[3], +m1[2]-1, +m1[1], +m1[4], +m1[5]);
+      } else {
+        dtObj = new Date(raw);
+      }
+      if (dtObj && !isNaN(dtObj)) {
+        const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        const hariStr = HARI[dtObj.getDay()];
+        const jamStr  = dtObj.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',hour12:false});
+        tsHtml = `<div class="ts-date">${hariStr}</div><div class="ts-time"><i class="fas fa-clock" style="font-size:9px;margin-right:2px"></i>${jamStr}</div>`;
+      } else {
+        // fallback: show raw split
+        const parts = raw.split(' ');
+        tsHtml = `<div class="ts-date">${parts[0]||raw}</div>${parts[1]?`<div class="ts-time">${parts[1].substring(0,5)}</div>`:''}`;
+      }
+    }
+    const np    = query ? highlightText(d.nama_petugas, query) : (d.nama_petugas || '-');
+    const jab   = query ? highlightText(d.jabatan, query) : (d.jabatan || '-');
+    const nppks = query ? highlightText(d.nama_ppks, query) : (d.nama_ppks || '-');
+    const kec   = query ? highlightText(d.kecamatan, query) : (d.kecamatan || '-');
+    const desa  = d.desa || '';
+    const fullJenis = d.jenis_ppks || '-';
+    const shortLabel = shortJenis(d.jenis_ppks);
+    const badgeHtml = `<span class="badge" title="${fullJenis}">${shortLabel}</span>`;
+    return `<tr>
+      <td>${tsHtml}</td>
+      <td><strong style="color:var(--text);font-size:13px">${np}</strong></td>
+      <td><span style="font-size:12px;color:var(--text3)">${jab}</span></td>
+      <td>
+        <span style="font-weight:600;color:var(--text)">${nppks}</span>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;display:flex;align-items:center;gap:3px">
+          <i class="fas fa-map-marker-alt" style="font-size:9px;color:var(--text3)"></i>
+          ${desa ? desa+', ' : ''}${kec}
+        </div>
       </td>
-    </tr>`).join('');
+      <td>${badgeHtml}</td>
+      <td><span style="font-size:12px;font-weight:600;color:var(--text2)">${d.kecamatan||'-'}</span></td>
+      <td>
+        <button class="btn-preview-row" onclick="openPreviewModal(${idx})">
+          <i class="fas fa-eye"></i> Detail
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  renderPagination(total);
+}
+
+function renderPagination(total) {
+  const totalPages = Math.ceil(total / logPerPage);
+  const info = document.getElementById('paginationInfo');
+  const btns = document.getElementById('paginationBtns');
+  if (!info || !btns) return;
+
+  if (total === 0) { info.innerHTML = ''; btns.innerHTML = ''; return; }
+
+  const start = (logCurrentPage - 1) * logPerPage + 1;
+  const end   = Math.min(logCurrentPage * logPerPage, total);
+  info.innerHTML = `Halaman <strong>${logCurrentPage}</strong> dari <strong>${totalPages}</strong> &nbsp;·&nbsp; Data <strong>${start}–${end}</strong>`;
+
+  let html = '';
+  html += `<button class="pg-btn" onclick="goToPage(${logCurrentPage-1})" ${logCurrentPage<=1?'disabled':''} title="Sebelumnya"><i class="fas fa-chevron-left"></i></button>`;
+  getPageRange(logCurrentPage, totalPages).forEach(p => {
+    if (p === '...') {
+      html += `<button class="pg-btn pg-ellipsis" disabled>…</button>`;
+    } else {
+      html += `<button class="pg-btn${p===logCurrentPage?' active':''}" onclick="goToPage(${p})">${p}</button>`;
+    }
+  });
+  html += `<button class="pg-btn" onclick="goToPage(${logCurrentPage+1})" ${logCurrentPage>=totalPages?'disabled':''} title="Berikutnya"><i class="fas fa-chevron-right"></i></button>`;
+  btns.innerHTML = html;
+}
+
+function getPageRange(current, total) {
+  if (total <= 7) return Array.from({length: total}, (_, i) => i+1);
+  const p = [];
+  if (current <= 4)        p.push(1,2,3,4,5,'...',total);
+  else if (current >= total-3) p.push(1,'...',total-4,total-3,total-2,total-1,total);
+  else                     p.push(1,'...',current-1,current,current+1,'...',total);
+  return p;
+}
+
+function goToPage(page) {
+  const total = logFilteredData.length;
+  const totalPages = Math.ceil(total / logPerPage);
+  if (page < 1 || page > totalPages) return;
+  logCurrentPage = page;
+  renderLog();
+  document.getElementById('logBody')?.closest('.log-table-wrap')?.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function onLogSearch(input) {
+  document.getElementById('logSearchClear').style.display = input.value ? 'block' : 'none';
+  logCurrentPage = 1;
+  renderLog();
+}
+
+function clearLogSearch() {
+  const input = document.getElementById('logSearchInput');
+  if (input) input.value = '';
+  document.getElementById('logSearchClear').style.display = 'none';
+  logCurrentPage = 1;
+  renderLog();
+}
+
+function onPerPageChange(sel) {
+  logPerPage = parseInt(sel.value) || 25;
+  logCurrentPage = 1;
+  renderLog();
+}
+
+// ===== DOWNLOAD MODAL =====
+const DL_PASS = 'passDinsos27';
+
+function openDownloadModal() {
+  // Pre-fill kecamatan from active log filter
+  const logKec = document.getElementById('logFilterKec')?.value || '';
+  const dlKec  = document.getElementById('dlKecFilter');
+  if (dlKec) dlKec.value = logKec;
+  // Reset password & error
+  const passEl = document.getElementById('dlPassword');
+  if (passEl) passEl.value = '';
+  const errEl = document.getElementById('dlPassError');
+  if (errEl) errEl.textContent = '';
+  if (passEl) passEl.classList.remove('error');
+  // Update count
+  updateDlCount();
+  document.getElementById('downloadModalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('dlPassword')?.focus(), 300);
+}
+
+function closeDownloadModal() {
+  document.getElementById('downloadModalOverlay').classList.remove('open');
+}
+
+function updateDlFormatCard() { /* visual only — CSS :has handles styling */ }
+
+function updateDlCount() {
+  const kec = document.getElementById('dlKecFilter')?.value || '';
+  const allData = getLocalData();
+  const filtered = kec ? allData.filter(d => (d.kecamatan||'').trim().toLowerCase() === kec.trim().toLowerCase()) : allData;
+  const el = document.getElementById('dlDataCount');
+  if (el) {
+    el.innerHTML = kec
+      ? `<i class="fas fa-filter" style="font-size:10px;margin-right:4px"></i>Kecamatan <strong>${kec}</strong>: <strong>${filtered.length}</strong> data akan diunduh`
+      : `<i class="fas fa-database" style="font-size:10px;margin-right:4px"></i>Semua kecamatan: <strong>${allData.length}</strong> data akan diunduh`;
+  }
+}
+
+// update count when kecamatan changes
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('dlKecFilter')?.addEventListener('change', updateDlCount);
+});
+
+function toggleDlPass(btn) {
+  const inp = document.getElementById('dlPassword');
+  if (!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+
+function processDownload() {
+  const passEl  = document.getElementById('dlPassword');
+  const errEl   = document.getElementById('dlPassError');
+  const pass    = passEl?.value || '';
+
+  // Validate password
+  if (!pass) {
+    errEl.textContent = 'Password wajib diisi.';
+    passEl.classList.add('error');
+    passEl.focus();
+    return;
+  }
+  if (pass !== DL_PASS) {
+    errEl.textContent = 'Password salah. Periksa kembali.';
+    passEl.classList.add('error');
+    passEl.value = '';
+    passEl.focus();
+    return;
+  }
+  errEl.textContent = '';
+  passEl.classList.remove('error');
+
+  // Get format & filter
+  const format = document.querySelector('input[name="dlFormat"]:checked')?.value || 'excel';
+  const kec    = document.getElementById('dlKecFilter')?.value || '';
+  const allData = getLocalData();
+  const data = kec ? allData.filter(d => (d.kecamatan||'').trim().toLowerCase() === kec.trim().toLowerCase()) : allData;
+
+  if (!data.length) { showToast('Tidak ada data untuk diunduh.', true); closeDownloadModal(); return; }
+
+  const now   = new Date();
+  const tStr  = now.toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'-');
+  const suffix = kec ? `_Kec.${kec.replace(/\s+/g,'_')}` : '_SemuaKecamatan';
+
+  if (format === 'excel') {
+    doExportExcel(data, suffix, tStr);
+  } else {
+    doExportPDF(data, kec, suffix, tStr);
+  }
+
+  closeDownloadModal();
+}
+
+function doExportExcel(data, suffix, tStr) {
+  const headers = [
+    'No','Waktu','Nama Petugas','Jabatan','NIK PPKS','Nama PPKS',
+    'Jenis Kelamin','Tanggal Lahir','No HP/WA','Kecamatan',
+    'Desa/Kelurahan','Alamat','Jenis PPKS','Hasil Kunjungan',
+    'Latitude','Longitude','Akurasi GPS'
+  ];
+  const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const rows = data.map((d,i) => [
+    i+1, d.timestamp||'', d.nama_petugas||'', d.jabatan||'',
+    d.nik||'', d.nama_ppks||'', d.jenis_kelamin||'', d.tgl_lahir||'',
+    d.hp||'', d.kecamatan||'', d.desa||'', d.alamat||'',
+    d.jenis_ppks||'', d.hasil_kunjungan||'', d.lat||'', d.lng||'', d.accuracy||''
+  ].map(esc).join(','));
+
+  const csv = '\uFEFF' + headers.map(esc).join(',') + '\n' + rows.join('\n');
+  const filename = `LogAktivitas_PPKS${suffix}_${tStr}.csv`;
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  showToast(`✓ Excel diunduh — ${data.length} data`);
+}
+
+function doExportPDF(data, kec, suffix, tStr) {
+  const title   = 'LOG AKTIVITAS KUNJUNGAN PPKS';
+  const instansi = 'Dinas Sosial Kabupaten Seluma';
+  const subtitle = kec ? `Kecamatan: ${kec}` : 'Semua Kecamatan';
+  const tanggal  = new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+
+  // Build printable HTML page, then open print dialog
+  const rows = data.map((d,i) => {
+    const ts = d.timestamp || '-';
+    return `<tr>
+      <td style="text-align:center">${i+1}</td>
+      <td>${ts}</td>
+      <td>${d.nama_petugas||'-'}</td>
+      <td>${d.jabatan||'-'}</td>
+      <td>${d.nama_ppks||'-'}</td>
+      <td>${d.nik||'-'}</td>
+      <td>${d.kecamatan||'-'}</td>
+      <td>${d.desa||'-'}</td>
+      <td>${d.jenis_ppks||'-'}</td>
+      <td>${d.hasil_kunjungan ? d.hasil_kunjungan.substring(0,60)+(d.hasil_kunjungan.length>60?'…':'') : '-'}</td>
+    </tr>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html lang="id"><head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Arial,sans-serif;font-size:10pt;color:#111;background:white;padding:18px 20px}
+    .doc-header{display:flex;align-items:flex-start;gap:14px;border-bottom:3px solid #0d2b5e;padding-bottom:12px;margin-bottom:14px}
+    .doc-logo{width:54px;height:54px;background:#0d2b5e;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:900;flex-shrink:0}
+    .doc-title-block{flex:1}
+    .doc-instansi{font-size:8pt;color:#555;font-weight:600;letter-spacing:0.3px;text-transform:uppercase}
+    .doc-title{font-size:15pt;font-weight:800;color:#0d2b5e;line-height:1.2;margin:2px 0}
+    .doc-sub{font-size:9pt;color:#444;margin-top:3px}
+    .doc-meta{font-size:8pt;color:#666;margin-top:8px;display:flex;gap:20px;flex-wrap:wrap}
+    .doc-meta span{display:flex;align-items:center;gap:4px}
+    table{width:100%;border-collapse:collapse;font-size:8pt;margin-top:8px}
+    thead tr{background:#0d2b5e;color:white}
+    thead th{padding:6px 7px;text-align:left;font-weight:700;font-size:7.5pt;white-space:nowrap}
+    tbody tr:nth-child(even){background:#f0f5ff}
+    tbody tr:hover{background:#dbeafe}
+    tbody td{padding:5px 7px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+    .footer-note{margin-top:18px;padding-top:10px;border-top:1px solid #ccc;font-size:8pt;color:#555;display:flex;justify-content:space-between;align-items:flex-end}
+    .footer-ttd{text-align:right}
+    .footer-ttd p{margin-bottom:48px}
+    @media print{
+      body{padding:10px 12px}
+      @page{margin:10mm;size:A4 landscape}
+    }
+  </style>
+  </head><body>
+  <div class="doc-header">
+    <div class="doc-logo">DS</div>
+    <div class="doc-title-block">
+      <div class="doc-instansi">${instansi}</div>
+      <div class="doc-title">${title}</div>
+      <div class="doc-sub">Bidang Penanganan Fakir Miskin dan Pemberdayaan Sosial</div>
+      <div class="doc-meta">
+        <span>📅 Dicetak: ${tanggal}</span>
+        <span>📍 Cakupan: ${subtitle}</span>
+        <span>📊 Jumlah Data: ${data.length} kunjungan</span>
+      </div>
+    </div>
+  </div>
+  <table>
+    <thead><tr>
+      <th style="width:28px">No</th>
+      <th style="width:80px">Waktu</th>
+      <th style="width:100px">Nama Petugas</th>
+      <th style="width:80px">Jabatan</th>
+      <th style="width:100px">Nama PPKS</th>
+      <th style="width:80px">NIK</th>
+      <th style="width:80px">Kecamatan</th>
+      <th style="width:80px">Desa/Kel.</th>
+      <th style="width:90px">Jenis PPKS</th>
+      <th>Hasil Kunjungan</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="footer-note">
+    <div>
+      <p style="font-size:8pt;color:#777">Dokumen ini digenerate otomatis oleh sistem NEXT PPKS</p>
+      <p style="font-size:8pt;color:#777">Dinas Sosial Kabupaten Seluma — ${tanggal}</p>
+    </div>
+    <div class="footer-ttd">
+      <p>Mengetahui,<br>Kepala Bidang</p>
+      <p style="margin-bottom:0">( _________________________ )</p>
+    </div>
+  </div>
+  <script>window.onload=function(){window.print()}<\/script>
+  </body></html>`;
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+  showToast(`✓ PDF siap dicetak — ${data.length} data`);
 }
 
 // ===== SIDEBAR =====
@@ -1828,6 +3047,7 @@ document.addEventListener('keydown',e=>{
     closeModal();
     closePhotoModal();
     closePreviewModal();
+    closeDownloadModal();
   }
   if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();
 });
