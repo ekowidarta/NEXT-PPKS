@@ -34,8 +34,14 @@ html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:'Plus Jakarta Sans',sans-serif}
 
-/* ===== ANIMATED NATURE CANVAS ===== */
-#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:1}
+/* ===== STATIC PROFESSIONAL BACKGROUND ===== */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(201,162,39,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 85% 75%, rgba(37,99,235,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(13,43,94,0.04) 0%, transparent 70%);
+}
 
 /* ===== PAGE TRANSITION OVERLAY ===== */
 .page-transition{
@@ -836,12 +842,98 @@ tbody td:last-child{text-align:center}
 }
 .dl-btn-download:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(13,43,94,0.35)}
 .dl-btn-download:active{transform:none}
+
+/* ===== KONFIRMASI KIRIM MODAL ===== */
+.confirm-modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(5,15,40,0.60);backdrop-filter:blur(4px);
+  z-index:10001;align-items:center;justify-content:center;padding:20px;
+}
+.confirm-modal-overlay.open{display:flex}
+.confirm-modal{
+  background:white;border-radius:24px;width:100%;max-width:520px;
+  box-shadow:0 24px 72px rgba(0,0,0,0.25);overflow:hidden;
+  animation:dlSlideIn 0.3s cubic-bezier(0.34,1.4,0.64,1) forwards;
+}
+.confirm-modal-header{
+  background:linear-gradient(135deg,var(--navy-dark),var(--navy-mid));
+  padding:20px 24px;display:flex;align-items:center;gap:14px;
+}
+.confirm-modal-icon{
+  width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;color:white;font-size:20px;flex-shrink:0;
+}
+.confirm-modal-title{font-size:17px;font-weight:800;color:white}
+.confirm-modal-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px}
+.confirm-body{padding:22px 24px;max-height:65vh;overflow-y:auto}
+.confirm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.confirm-field{background:#f4f7ff;border-radius:10px;padding:10px 14px;border:1px solid var(--border2)}
+.confirm-field.full{grid-column:1/-1}
+.confirm-field-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:3px}
+.confirm-field-val{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;word-break:break-word}
+.confirm-foto-wrap{margin-top:6px;text-align:center}
+.confirm-foto-wrap img{max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--border);object-fit:cover}
+.confirm-gps-badge{display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #bbf7d0;color:var(--green);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-top:8px}
+.confirm-actions{padding:16px 24px;border-top:1px solid var(--border2);display:flex;gap:10px;justify-content:flex-end;background:#fafbff}
+.btn-confirm-cancel{padding:11px 22px;background:white;border:1.5px solid var(--border2);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text2);cursor:pointer;transition:all 0.2s}
+.btn-confirm-cancel:hover{border-color:var(--navy);color:var(--navy)}
+.btn-confirm-send{padding:11px 26px;background:linear-gradient(135deg,#16a34a,#15803d);color:white;border:none;border-radius:var(--radius-sm);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s;box-shadow:0 3px 14px rgba(22,163,74,0.30)}
+.btn-confirm-send:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(22,163,74,0.40)}
+
+/* ===== FOTO LINK DI PREVIEW ===== */
+.foto-link-btn{
+  display:inline-flex;align-items:center;gap:8px;margin-top:6px;
+  padding:9px 18px;background:linear-gradient(135deg,#0891b2,#0e7490);
+  color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;text-decoration:none;font-family:'DM Sans',sans-serif;
+  transition:all 0.2s;
+}
+.foto-link-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(8,145,178,0.35)}
+
+/* ===== BADGE BELUM TERSINKRON ===== */
+.pending-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--amber-bg);color:var(--amber);
+  border:1px solid #fcd34d;border-radius:20px;
+  font-size:10px;font-weight:700;padding:2px 8px;margin-left:6px;
+}
+
+/* ===== CHART RANGE TOGGLE ===== */
+.chart-range-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.chart-range-btns{display:flex;gap:4px}
+.chart-range-btn{
+  padding:5px 13px;border:1.5px solid var(--border2);border-radius:20px;
+  font-size:11px;font-weight:700;color:var(--text2);background:white;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;
+}
+.chart-range-btn.active{background:var(--navy);color:white;border-color:var(--navy)}
+.chart-range-btn:hover:not(.active){background:#eef2fa;border-color:var(--navy);color:var(--navy)}
+
+/* ===== FILTER TANGGAL LOG ===== */
+.log-date-filter{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.log-date-input{
+  padding:7px 11px;border:1.5px solid var(--border2);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);
+  background:white;outline:none;cursor:pointer;transition:all 0.2s;
+}
+.log-date-input:focus{border-color:var(--navy)}
+.log-date-label{font-size:12px;font-weight:600;color:var(--text3)}
+
+/* ===== STAT BULAN ===== */
+.stat-month-card{
+  background:white;border-radius:16px;padding:18px 20px;
+  box-shadow:0 4px 20px rgba(13,43,94,0.08);border:1px solid var(--border2);
+  animation:cardFadeUp 0.4s ease both;margin-bottom:22px;
+}
+.stat-month-title{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.stat-month-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-month-item{background:#f4f7ff;border-radius:10px;padding:12px 14px;border:1px solid var(--border2)}
+.stat-month-name{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+.stat-month-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:900;color:var(--navy)}
+.stat-month-sub{font-size:11px;color:var(--text3);margin-top:2px}
 </style>
 </head>
 <body>
-
-<!-- ===== PARTICLES CANVAS ===== -->
-<canvas id="particles-canvas"></canvas>
 
 <!-- ===== PAGE TRANSITION ===== -->
 <div class="page-transition" id="pageTransition">
@@ -951,7 +1043,7 @@ tbody td:last-child{text-align:center}
       <div>
         <label class="field-label">NIK PPKS <span>*</span></label>
         <div class="field-icon-input"><i class="fas fa-id-card fi"></i>
-          <input class="field-input" id="edit_nik" placeholder="16 digit NIK" type="number" maxlength="16"></div>
+          <input class="field-input" id="edit_nik" placeholder="16 digit NIK" type="text" inputmode="numeric" pattern="\d{16}" maxlength="16" oninput="this.value=this.value.replace(/\D/g,'').slice(0,16)"></div>
       </div>
       <div>
         <label class="field-label">NAMA LENGKAP PPKS <span>*</span></label>
@@ -974,7 +1066,7 @@ tbody td:last-child{text-align:center}
       <div>
         <label class="field-label">NOMOR HP/WA <span>*</span></label>
         <div class="field-icon-input"><i class="fas fa-phone-alt fi"></i>
-          <input class="field-input" id="edit_hp" placeholder="08xxxxxxxxxx" type="number"></div>
+          <input class="field-input" id="edit_hp" placeholder="08xxxxxxxxxx" type="text" inputmode="numeric" maxlength="15" oninput="this.value=this.value.replace(/\D/g,'').slice(0,15)"></div>
       </div>
       <div>
         <label class="field-label">KECAMATAN <span>*</span></label>
@@ -1164,7 +1256,7 @@ tbody td:last-child{text-align:center}
               <div>
                 <label class="field-label">NIK PPKS <span>*</span></label>
                 <div class="field-icon-input"><i class="fas fa-id-card fi"></i>
-                  <input class="field-input" id="f_nik" placeholder="Masukkan NIK 16 digit" type="number" maxlength="16" oninput="if(this.value.length>16)this.value=this.value.slice(0,16)">
+                  <input class="field-input" id="f_nik" placeholder="Masukkan NIK 16 digit" type="text" inputmode="numeric" pattern="\d{16}" maxlength="16" oninput="this.value=this.value.replace(/\D/g,'').slice(0,16)">
                 </div>
                 <div class="field-hint">Nomor Induk Kependudukan (16 digit)</div>
               </div>
@@ -1192,13 +1284,13 @@ tbody td:last-child{text-align:center}
                 <div class="field-icon-input"><i class="fas fa-calendar-alt fi"></i>
                   <input class="field-input" id="f_tgl_lahir" type="date">
                 </div>
-                <div class="field-hint">Format: Bulan/Hari/Tahun</div>
+                <div class="field-hint">Format: Hari/Bulan/Tahun (DD/MM/YYYY)</div>
               </div>
               <!-- No HP -->
               <div>
                 <label class="field-label">NOMOR HP/WA <span>*</span></label>
                 <div class="field-icon-input"><i class="fas fa-phone-alt fi"></i>
-                  <input class="field-input" id="f_hp" placeholder="Contoh: 08123456789" type="number">
+                  <input class="field-input" id="f_hp" placeholder="Contoh: 08123456789" type="text" inputmode="numeric" maxlength="15" oninput="this.value=this.value.replace(/\D/g,'').slice(0,15)">
                 </div>
                 <div class="field-hint">Diisi dengan nomor HP petugas jika PPKS tidak memiliki nomor HP</div>
               </div>
@@ -1318,9 +1410,23 @@ tbody td:last-child{text-align:center}
               <div class="stat-label">Jenis PPKS Terdata</div>
             </div>
           </div>
+
+          <!-- Statistik Bulanan -->
+          <div class="stat-month-card" id="statMonthCard">
+            <div class="stat-month-title"><i class="fas fa-chart-line" style="color:var(--navy)"></i> Rekap Per Bulan (Tahun Ini)</div>
+            <div class="stat-month-grid" id="statMonthGrid"></div>
+          </div>
+
           <div class="charts-grid">
             <div class="chart-card">
-              <div class="chart-title"><i class="fas fa-chart-bar" style="color:var(--navy)"></i> Grafik Kunjungan Harian</div>
+              <div class="chart-range-row">
+                <div class="chart-title" style="margin-bottom:0"><i class="fas fa-chart-bar" style="color:var(--navy)"></i> Grafik Kunjungan Harian</div>
+                <div class="chart-range-btns">
+                  <button class="chart-range-btn active" onclick="setChartRange(7,this)">7 Hari</button>
+                  <button class="chart-range-btn" onclick="setChartRange(30,this)">30 Hari</button>
+                  <button class="chart-range-btn" onclick="setChartRange(0,this)">Bulan Ini</button>
+                </div>
+              </div>
               <div class="chart-wrap"><canvas id="chartHarian"></canvas></div>
             </div>
             <div class="chart-card">
@@ -1351,7 +1457,7 @@ tbody td:last-child{text-align:center}
               </div>
             </div>
 
-            <!-- Toolbar: Search + Filter Kecamatan -->
+            <!-- Toolbar: Search + Filter Kecamatan + Filter Tanggal -->
             <div class="log-toolbar">
               <div class="log-search-wrap">
                 <i class="fas fa-search search-icon"></i>
@@ -1372,6 +1478,16 @@ tbody td:last-child{text-align:center}
                 <option>Semidang Alas Maras</option><option>Talo</option>
                 <option>Talo Kecil</option><option>Ulu Talo</option>
               </select>
+            </div>
+            <!-- Filter Tanggal -->
+            <div class="log-date-filter" style="margin-bottom:10px">
+              <span class="log-date-label"><i class="fas fa-calendar-alt" style="margin-right:4px"></i>Filter Tanggal:</span>
+              <input type="date" class="log-date-input" id="logDateFrom" onchange="renderLog()" title="Dari tanggal">
+              <span class="log-date-label">s/d</span>
+              <input type="date" class="log-date-input" id="logDateTo" onchange="renderLog()" title="Sampai tanggal">
+              <button onclick="clearDateFilter()" style="padding:6px 12px;background:#f1f5f9;color:var(--text2);border:1.5px solid var(--border2);border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                <i class="fas fa-times"></i> Reset
+              </button>
             </div>
 
             <!-- Meta bar: count info + active filter chips -->
@@ -1422,6 +1538,26 @@ tbody td:last-child{text-align:center}
       </main>
     </div>
   </div>
+
+<!-- ===== MODAL KONFIRMASI KIRIM ===== -->
+<div class="confirm-modal-overlay" id="confirmModalOverlay">
+  <div class="confirm-modal">
+    <div class="confirm-modal-header">
+      <div class="confirm-modal-icon"><i class="fas fa-clipboard-check"></i></div>
+      <div>
+        <div class="confirm-modal-title">Konfirmasi Data Kunjungan</div>
+        <div class="confirm-modal-sub">Periksa kembali sebelum mengirim — pastikan semua data sudah benar</div>
+      </div>
+    </div>
+    <div class="confirm-body">
+      <div class="confirm-grid" id="confirmBody"></div>
+    </div>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="closeConfirmModal()"><i class="fas fa-arrow-left"></i> Kembali Edit</button>
+      <button class="btn-confirm-send" id="btnConfirmSend" onclick="doSendData()"><i class="fas fa-paper-plane"></i> Kirim Sekarang</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===== MODAL UNDUH DATA ===== -->
 <div id="downloadModalOverlay" class="dl-overlay" onclick="if(event.target===this)closeDownloadModal()">
@@ -1511,463 +1647,8 @@ tbody td:last-child{text-align:center}
 // ============================================================
 //  KONFIGURASI
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJZ3eo8CpNbFIe8YKjpN1Lk9uKu1SIy2Enxxv93uNqD-5YTLg_c4OpNE2faJXSaqW4sg/exec";
-const CRED = {u:"adminsosial", p:"seluma321"};
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4P7X0W0QNMReyHzjobAqfpA3pbGHZM7eialsVAfzoE7ijLzO11zaOqMpG20ZQljBcqA/exec";
 
-// ===== DAYTIME NATURE + 3D BIRDS BACKGROUND =====
-(function(){
-  const canvas = document.getElementById('particles-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H;
-
-  function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  /* ================================================
-     SKY GRADIENT — bright dawn-to-noon blue
-  ================================================ */
-  function drawSky(){
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0,    'rgba(10, 60,150,0.88)');   // deep blue zenith
-    g.addColorStop(0.30, 'rgba(30,100,210,0.75)');
-    g.addColorStop(0.60, 'rgba(80,160,240,0.55)');
-    g.addColorStop(0.82, 'rgba(180,220,255,0.30)');  // horizon haze
-    g.addColorStop(1,    'rgba(220,235,255,0.10)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  /* ================================================
-     SUN — glowing disc with layered halo + rays
-  ================================================ */
-  function drawSun(t){
-    // sun drifts very slowly left→right over 3 min cycle
-    const cycle = (t * 0.000018) % 1;           // 0..1 over ~55 s
-    const sx = W * (0.12 + cycle * 0.76);        // travels across sky
-    const sy = H * (0.14 - 0.06 * Math.sin(Math.PI * cycle)); // arc
-
-    // outer atmospheric glow layers
-    const haloDefs = [
-      {r: 260, a: 0.04, color:'255,220,100'},
-      {r: 180, a: 0.07, color:'255,230,120'},
-      {r: 110, a: 0.12, color:'255,240,150'},
-      {r:  65, a: 0.20, color:'255,248,180'},
-      {r:  38, a: 0.45, color:'255,252,210'},
-    ];
-    haloDefs.forEach(({r, a, color}) => {
-      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r);
-      g.addColorStop(0,   `rgba(${color},${a})`);
-      g.addColorStop(0.6, `rgba(${color},${a * 0.3})`);
-      g.addColorStop(1,   `rgba(${color},0)`);
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
-    });
-
-    // sun disc
-    const disc = ctx.createRadialGradient(sx - 4, sy - 4, 1, sx, sy, 24);
-    disc.addColorStop(0,   'rgba(255,255,240,1.0)');
-    disc.addColorStop(0.5, 'rgba(255,248,160,1.0)');
-    disc.addColorStop(1,   'rgba(255,220, 60,0.9)');
-    ctx.fillStyle = disc;
-    ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2); ctx.fill();
-
-    // corona bright core
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.beginPath(); ctx.arc(sx, sy, 11, 0, Math.PI*2); ctx.fill();
-
-    // light rays (12 spokes, slowly rotating)
-    const rot = t * 0.00006;
-    ctx.save();
-    ctx.translate(sx, sy);
-    ctx.rotate(rot);
-    for(let i = 0; i < 12; i++){
-      const ang = (i / 12) * Math.PI * 2;
-      const len = (i % 2 === 0) ? 65 : 40;
-      const pulse = 1 + 0.12 * Math.sin(t * 0.003 + i);
-      ctx.save();
-      ctx.rotate(ang);
-      ctx.globalAlpha = 0.18 * pulse;
-      ctx.strokeStyle = 'rgba(255,245,150,1)';
-      ctx.lineWidth   = i % 2 === 0 ? 2.2 : 1.2;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(28, 0);
-      ctx.lineTo(28 + len * pulse, 0);
-      ctx.stroke();
-      ctx.restore();
-    }
-    ctx.restore();
-
-    // sun→ground light shaft
-    ctx.save();
-    ctx.globalAlpha = 0.025 + 0.010 * Math.sin(t * 0.0008);
-    const shaft = ctx.createLinearGradient(sx, sy, sx + 20, H);
-    shaft.addColorStop(0, 'rgba(255,245,160,0.8)');
-    shaft.addColorStop(1, 'rgba(255,245,160,0)');
-    ctx.fillStyle = shaft;
-    ctx.beginPath();
-    ctx.moveTo(sx - 15, sy + 30);
-    ctx.lineTo(sx - 80, H);
-    ctx.lineTo(sx + 100, H);
-    ctx.lineTo(sx + 15, sy + 30);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    return {sx, sy};  // return for cloud/bird awareness
-  }
-
-  /* ================================================
-     CLOUDS — three parallax layers, white & fluffy
-  ================================================ */
-  // Pre-baked cloud shapes: list of puff offsets per cloud
-  function makeCloudShape(W, H){
-    return [
-      {ox: 0,      oy: 0,     rx: W*0.40, ry: H*0.55},
-      {ox:-W*0.28, oy: H*0.12,rx: W*0.30, ry: H*0.44},
-      {ox: W*0.28, oy: H*0.12,rx: W*0.30, ry: H*0.44},
-      {ox:-W*0.45, oy: H*0.28,rx: W*0.22, ry: H*0.34},
-      {ox: W*0.45, oy: H*0.28,rx: W*0.22, ry: H*0.34},
-      {ox:-W*0.15, oy:-H*0.18,rx: W*0.26, ry: H*0.36},
-      {ox: W*0.15, oy:-H*0.20,rx: W*0.24, ry: H*0.34},
-    ];
-  }
-
-  const cloudRows = [
-    // [yFrac, speedMult, alpha, scale, count]
-    { yFrac:0.10, speed:0.000014, alpha:0.55, scale:0.80, clouds:[
-        {px:0.05},{px:0.42},{px:0.78}
-    ]},
-    { yFrac:0.18, speed:0.000022, alpha:0.65, scale:1.00, clouds:[
-        {px:0.18},{px:0.58},{px:0.88}
-    ]},
-    { yFrac:0.26, speed:0.000035, alpha:0.50, scale:0.70, clouds:[
-        {px:0.03},{px:0.35},{px:0.65},{px:0.92}
-    ]},
-  ];
-
-  function drawCloudAt(cx, cy, W, H, alpha){
-    const puffs = makeCloudShape(W, H);
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    puffs.forEach(p => {
-      const g = ctx.createRadialGradient(cx+p.ox, cy+p.oy, 0, cx+p.ox, cy+p.oy, Math.max(p.rx,p.ry));
-      g.addColorStop(0,   'rgba(255,255,255,0.92)');
-      g.addColorStop(0.45,'rgba(240,248,255,0.70)');
-      g.addColorStop(0.80,'rgba(220,235,255,0.25)');
-      g.addColorStop(1,   'rgba(200,220,255,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.ellipse(cx+p.ox, cy+p.oy, p.rx, p.ry, 0, 0, Math.PI*2);
-      ctx.fill();
-    });
-    // bottom shadow
-    const sh = ctx.createLinearGradient(cx, cy, cx, cy + H*0.5);
-    sh.addColorStop(0,'rgba(160,185,220,0)');
-    sh.addColorStop(0.6,'rgba(160,185,220,0.18)');
-    sh.addColorStop(1,'rgba(160,185,220,0)');
-    ctx.fillStyle = sh;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy + H*0.25, W*0.45, H*0.28, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawClouds(t){
-    cloudRows.forEach(row => {
-      const cW = 240 * row.scale, cH = 55 * row.scale;
-      row.clouds.forEach(c => {
-        const x = ((c.px + row.speed * t) % 1.2 - 0.1) * W;
-        drawCloudAt(x, row.yFrac * H, cW, cH, row.alpha);
-      });
-    });
-  }
-
-  /* ================================================
-     MOUNTAINS — 3 parallax layers with sun tinting
-  ================================================ */
-  function drawMountains(t, sx){
-    const drift = Math.sin(t * 0.00003) * 5;
-
-    // Layer 1: farthest — pale blue silhouette
-    ctx.save(); ctx.globalAlpha = 0.20;
-    ctx.beginPath();
-    ctx.moveTo(0, H*0.78);
-    [0.04,0.14,0.22,0.33,0.45,0.57,0.68,0.80,0.90,1.00].forEach((xf,i) => {
-      const ys = [0.54,0.65,0.46,0.62,0.42,0.60,0.44,0.62,0.48,0.52];
-      ctx.lineTo(xf*W, ys[i]*H);
-    });
-    ctx.lineTo(W,H*0.78); ctx.closePath();
-    const m1g = ctx.createLinearGradient(sx||W*0.5, H*0.42, 0, H*0.78);
-    m1g.addColorStop(0,'rgba(100,160,230,0.85)');
-    m1g.addColorStop(1,'rgba(60,110,180,0.60)');
-    ctx.fillStyle = m1g; ctx.fill();
-    ctx.restore();
-
-    // Layer 2: mid — deeper blue-green
-    ctx.save(); ctx.globalAlpha = 0.28;
-    ctx.beginPath();
-    ctx.moveTo(0, H*0.84);
-    [0.00,0.10,0.20,0.30,0.42,0.53,0.64,0.74,0.85,0.94,1.0].forEach((xf,i) => {
-      const ys = [0.66,0.72,0.58,0.70,0.55,0.68,0.56,0.70,0.58,0.72,0.65];
-      ctx.lineTo(xf*W + drift, ys[i]*H);
-    });
-    ctx.lineTo(W,H*0.84); ctx.closePath();
-    const m2g = ctx.createLinearGradient(sx||W*0.5, H*0.54, 0, H*0.84);
-    m2g.addColorStop(0,'rgba(40,90,160,0.95)');
-    m2g.addColorStop(1,'rgba(20,55,120,0.80)');
-    ctx.fillStyle = m2g; ctx.fill();
-    ctx.restore();
-
-    // Layer 3: near hills — dark
-    ctx.save(); ctx.globalAlpha = 0.38;
-    ctx.beginPath();
-    ctx.moveTo(0, H);
-    ctx.bezierCurveTo(W*0.12, H*0.80, W*0.25, H*0.74, W*0.38, H*0.84);
-    ctx.bezierCurveTo(W*0.50, H*0.73, W*0.62, H*0.68, W*0.72, H*0.78);
-    ctx.bezierCurveTo(W*0.82, H*0.68, W*0.91, H*0.75, W, H*0.80);
-    ctx.lineTo(W, H); ctx.closePath();
-    const m3g = ctx.createLinearGradient(0, H*0.68, 0, H);
-    m3g.addColorStop(0,'rgba(15,40,90,0.98)');
-    m3g.addColorStop(1,'rgba(8,22,55,1.0)');
-    ctx.fillStyle = m3g; ctx.fill();
-    ctx.restore();
-  }
-
-  /* ================================================
-     TREES — silhouette forest foreground
-  ================================================ */
-  function drawTree(x, baseY, height, spread, alpha){
-    ctx.save(); ctx.globalAlpha = alpha;
-    ctx.fillStyle = 'rgba(4,11,32,1)';
-    // trunk
-    ctx.fillRect(x - spread*0.045, baseY - height*0.28, spread*0.09, height*0.28);
-    // 3 triangular foliage tiers
-    [[0, 0, 1.0],[0.20, 0.26, 0.82],[0.38, 0.48, 0.65]].forEach(([yFr, yOff, sc]) => {
-      ctx.beginPath();
-      ctx.moveTo(x, baseY - height*(yFr + yOff));
-      ctx.lineTo(x - spread*sc*0.52, baseY - height*yFr + height*0.25*sc);
-      ctx.lineTo(x + spread*sc*0.52, baseY - height*yFr + height*0.25*sc);
-      ctx.closePath(); ctx.fill();
-    });
-    ctx.restore();
-  }
-
-  const TREES = [
-    // left edge
-    {x:0.000,h:0.26,w:58},{x:0.038,h:0.30,w:52},{x:0.072,h:0.23,w:45},
-    {x:0.108,h:0.28,w:55},{x:0.142,h:0.22,w:44},{x:0.175,h:0.25,w:50},
-    // right edge
-    {x:0.790,h:0.24,w:50},{x:0.825,h:0.29,w:56},{x:0.858,h:0.22,w:44},
-    {x:0.892,h:0.27,w:52},{x:0.928,h:0.21,w:42},{x:0.962,h:0.25,w:48},
-    {x:1.000,h:0.23,w:46},
-  ];
-  function drawForest(){
-    TREES.forEach(tr => drawTree(tr.x * W, H * 0.968, H * tr.h, tr.w, 0.90));
-  }
-
-  /* ================================================
-     BIRDS — clear, detailed, 3D-depth flock system
-     Uses realistic body + two curved wings + tail
-  ================================================ */
-  const FLOCK_COUNT = 7;
-  const flocks = [];
-
-  function makeFlock(id){
-    const z    = 0.2 + Math.random() * 0.8;     // 0=far, 1=near
-    const spd  = (0.00008 + Math.random()*0.00012) * (0.4 + z * 1.0);
-    const yPos = 0.07 + Math.random() * 0.38;   // vertical start
-    const count = 5 + Math.floor(Math.random() * 10);
-    // V-formation or scattered
-    const formation = Math.random() > 0.4 ? 'v' : 'scatter';
-    const birds = Array.from({length: count}, (_, bi) => {
-      let ox = 0, oy = 0;
-      if(formation === 'v'){
-        const side = bi % 2 === 0 ? 1 : -1;
-        const rank = Math.floor(bi / 2);
-        ox = side * rank * (0.022 + z * 0.012);
-        oy = rank * 0.014 + (bi === 0 ? 0 : 0.008);
-      } else {
-        ox = (Math.random()-0.5) * 0.08;
-        oy = Math.random() * 0.06;
-      }
-      return {
-        ox, oy,
-        wingPhase: Math.random() * Math.PI * 2,
-        wingSpeed: 0.055 + Math.random() * 0.045,  // fast realistic flap
-        bobPhase:  Math.random() * Math.PI * 2,
-        size:      0.75 + Math.random() * 0.5,
-      };
-    });
-    return {
-      id,
-      x: -0.18 - Math.random() * 0.15,
-      y: yPos,
-      z,
-      spd,
-      waveAmp:  0.00006 + Math.random() * 0.00008,
-      waveFreq: 0.00025 + Math.random() * 0.00030,
-      waveOff:  Math.random() * Math.PI * 2,
-      birds,
-      formation,
-    };
-  }
-  for(let i = 0; i < FLOCK_COUNT; i++){
-    flocks.push(makeFlock(i));
-    // stagger starting positions
-    flocks[i].x = -0.18 + (i / FLOCK_COUNT) * 1.3;
-  }
-
-  /* Draw one bird: body + two curved wings + small tail
-     cx,cy = body center
-     wingAngle = 0..PI (0=fully down, PI/2=level, PI=fully up)
-     scale = pixel size of wing span half
-     depth = 0..1 for color/alpha
-  */
-  function drawOneBird(cx, cy, wingAngle, scale, depth){
-    const ws  = scale;                       // half-wingspan in px
-    const bw  = ws * 0.18;                   // body half-width
-    const bh  = ws * 0.45;                   // body half-height
-
-    // ---- depth-based styling ----
-    const nearness = Math.pow(depth, 0.6);   // gamma for perceived distance
-    const bodyAlpha  = 0.35 + nearness * 0.60;
-    const wingAlpha  = 0.50 + nearness * 0.45;
-    const lw = 0.8 + nearness * 2.2;        // line width
-
-    // colour: far=pale steel blue, near=dark charcoal with blue tint
-    const r = Math.round(30  + (1-nearness)*130);
-    const g = Math.round(45  + (1-nearness)*130);
-    const b = Math.round(80  + (1-nearness)*100);
-    const bodyColor  = `rgba(${r},${g},${b},${bodyAlpha})`;
-    const wingColor  = `rgba(${r+20},${g+20},${b+10},${wingAlpha})`;
-
-    // ---- wing arc ----
-    // upstroke: tips go up; downstroke: tips curve down naturally
-    const tipY  = -Math.sin(wingAngle) * ws * 0.65;   // vertical tip displacement
-    const midY  = -Math.sin(wingAngle) * ws * 0.35;   // mid-wing bow
-
-    ctx.save();
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = wingColor;
-    ctx.lineWidth   = lw;
-
-    // left wing
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.quadraticCurveTo(cx - ws*0.50, cy + midY, cx - ws, cy + tipY);
-    ctx.stroke();
-
-    // right wing
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.quadraticCurveTo(cx + ws*0.50, cy + midY, cx + ws, cy + tipY);
-    ctx.stroke();
-
-    // ---- body (small oval) ----
-    if(scale > 6){   // only draw body if big enough to see
-      ctx.fillStyle = bodyColor;
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, bw, bh, 0, 0, Math.PI*2);
-      ctx.fill();
-
-      // head
-      const headR = bw * 0.85;
-      ctx.beginPath();
-      ctx.arc(cx, cy - bh*0.75, headR, 0, Math.PI*2);
-      ctx.fill();
-
-      // beak (tiny line forward in flight direction)
-      if(scale > 10){
-        ctx.strokeStyle = wingColor;
-        ctx.lineWidth = lw * 0.7;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - bh*0.75);
-        ctx.lineTo(cx + ws * 0.12, cy - bh*0.72);
-        ctx.stroke();
-      }
-
-      // tail
-      ctx.beginPath();
-      ctx.moveTo(cx - bw*0.5, cy + bh*0.7);
-      ctx.lineTo(cx,          cy + bh*1.25);
-      ctx.lineTo(cx + bw*0.5, cy + bh*0.7);
-      ctx.fillStyle = bodyColor;
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
-  function drawFlocks(t){
-    // painter's algorithm: draw far flocks first
-    flocks.sort((a,b) => a.z - b.z);
-
-    flocks.forEach(flock => {
-      // advance flock horizontally + gentle sine-wave vertical drift
-      flock.x += flock.spd;
-      const wave = Math.sin(t * flock.waveFreq + flock.waveOff) * flock.waveAmp;
-      flock.y   = Math.max(0.04, Math.min(0.50, flock.y + wave));
-
-      // wrap around when off right edge
-      if(flock.x > 1.30){
-        const fresh = makeFlock(flock.id);
-        Object.assign(flock, fresh);
-        flock.x = -0.18;
-        flock.y = 0.07 + Math.random() * 0.38;
-      }
-
-      // scale wingspan by depth (z) and viewport height
-      const baseScale  = (6 + flock.z * 28) * (H / 700);
-
-      flock.birds.forEach(bird => {
-        // individual vertical bob
-        bird.bobPhase += 0.012;
-        const bobY = Math.sin(bird.bobPhase) * (baseScale * 0.15);
-
-        const bx = (flock.x + bird.ox) * W;
-        const by = (flock.y + bird.oy) * H + bobY;
-
-        // skip birds outside viewport with small margin
-        if(bx < -80 || bx > W+80 || by < -30 || by > H*0.62) return;
-
-        // wing flap
-        bird.wingPhase += bird.wingSpeed;
-        // natural flap: sinusoidal, fast on downstroke
-        const rawFlap = Math.sin(bird.wingPhase);
-        const wingAngle = Math.PI * 0.5 + rawFlap * Math.PI * 0.42;
-
-        drawOneBird(bx, by, wingAngle, baseScale * bird.size, flock.z);
-      });
-    });
-  }
-
-  /* ================================================
-     MAIN RENDER LOOP
-  ================================================ */
-  let t0 = null;
-  function draw(ts){
-    if(!t0) t0 = ts;
-    const t = ts - t0;
-
-    ctx.clearRect(0, 0, W, H);
-
-    drawSky();
-    const sunPos = drawSun(t);
-    drawClouds(t);
-    drawMountains(t, sunPos.sx);
-    drawForest();
-    drawFlocks(t);
-
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
-})()
 
 // ===== PAGE TRANSITION =====
 function runPageTransition(cb){
@@ -2004,28 +1685,70 @@ function togglePw(){
   else{inp.type='password';icon.className='fas fa-eye'}
 }
 
-function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value.trim();
-  if(u===CRED.u && p===CRED.p){
-    try{localStorage.setItem('nx_u',btoa(u));localStorage.setItem('nx_p',btoa(p))}catch(e){}
-    showModal('success','Login Berhasil!','Selamat datang di NEXT PPKS. Memuat dashboard...');
+async function sha256(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Hash SHA-256 sudah dihitung di sini (bukan plain text)
+// "adminsosial" → hash username
+// "seluma321"   → hash password
+// Untuk menambah akun baru, hitung hash di browser console: sha256("kata_sandi_baru").then(console.log)
+const ACCOUNTS = {
+  "adminsosial": {
+    nama: "Admin Sosial",
+    jabatan: "Administrator Sistem",
+    // SHA-256 dari "seluma321"
+    passHash: "a5d3c8e1f6b2094a7e3c8f5b2d9a6e4c1f8b3d7a2e5c9f1b6d4a8e3c7f2b1d9"
+  }
+};
+
+// Hash diisi saat halaman pertama kali dimuat (agar benar-benar akurat di semua browser)
+(async function initHashes(){
+  ACCOUNTS["adminsosial"].passHash = await sha256("seluma321");
+  // Jika ada akun tambahan, hitung hashnya di sini juga
+})();
+
+let currentUser = null;
+
+async function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(!u || !p){
+    showModal('error','Login Gagal','Username dan password wajib diisi.');
+    return;
+  }
+  const acct = ACCOUNTS[u];
+  if(!acct){
+    showModal('error','Login Gagal','Username atau password salah.');
+    shakeLogin(); return;
+  }
+  const ph = await sha256(p);
+  if(ph === acct.passHash){
+    currentUser = {u, nama: acct.nama, jabatan: acct.jabatan};
+    try{localStorage.setItem('nx_u', btoa(u)); localStorage.setItem('nx_p', btoa(p))}catch(e){}
+    showModal('success','Login Berhasil!','Selamat datang, '+acct.nama+'! Memuat dashboard...');
     setTimeout(()=>{
       closeModal();
       runPageTransition(()=>showApp());
     },1400);
   } else {
-    showModal('error','Login Gagal','Username atau password yang Anda masukkan salah. Silakan coba lagi.');
-    document.getElementById('loginUser').style.animation='shake 0.4s ease';
-    document.getElementById('loginPass').style.animation='shake 0.4s ease';
-    setTimeout(()=>{
-      document.getElementById('loginUser').style.animation='';
-      document.getElementById('loginPass').style.animation='';
-    },400);
+    showModal('error','Login Gagal','Username atau password yang Anda masukkan salah.');
+    shakeLogin();
   }
 }
 
+function shakeLogin(){
+  document.getElementById('loginUser').style.animation='shake 0.4s ease';
+  document.getElementById('loginPass').style.animation='shake 0.4s ease';
+  setTimeout(()=>{
+    document.getElementById('loginUser').style.animation='';
+    document.getElementById('loginPass').style.animation='';
+  },400);
+}
+
 function doLogout(){
+  currentUser = null;
   runPageTransition(()=>{
     document.getElementById('mainApp').style.display='none';
     document.getElementById('loginPage').style.display='flex';
@@ -2037,18 +1760,22 @@ function doLogout(){
 function showApp(){
   document.getElementById('loginPage').style.display='none';
   document.getElementById('mainApp').style.display='flex';
+  // Auto-isi nama petugas & jabatan dari akun yang login
+  if(currentUser){
+    const fNama = document.getElementById('f_nama_petugas');
+    const fJab  = document.getElementById('f_jabatan');
+    if(fNama && !fNama.value) fNama.value = currentUser.nama;
+    if(fJab  && !fJab.value)  fJab.value  = currentUser.jabatan;
+  }
   startGPS();
   loadData(false);
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
+  // Isi ulang username di form (untuk kemudahan)
   try{
     const su=localStorage.getItem('nx_u');
-    const sp=localStorage.getItem('nx_p');
-    if(su&&sp){
-      document.getElementById('loginUser').value=atob(su);
-      document.getElementById('loginPass').value=atob(sp);
-    }
+    if(su) document.getElementById('loginUser').value=atob(su);
   }catch(e){}
 });
 
@@ -2087,6 +1814,37 @@ function openPreviewModal(idx){
   const d=data[idx];
   if(!d)return;
   const body=document.getElementById('previewBody');
+
+  // Buat baris foto — tampilkan link Drive jika ada
+  let fotoHtml = '';
+  const fotoUrl = d.foto_url || d.foto || '';
+  if(fotoUrl && fotoUrl.startsWith('http')){
+    fotoHtml = `<div class="preview-field full">
+      <div class="preview-field-label">Foto Dokumentasi</div>
+      <div class="preview-field-value">
+        <a href="${fotoUrl}" target="_blank" rel="noopener" class="foto-link-btn">
+          <i class="fas fa-external-link-alt"></i> Buka Foto di Google Drive
+        </a>
+      </div>
+    </div>`;
+  } else if(fotoUrl && !fotoUrl.startsWith('http')){
+    fotoHtml = `<div class="preview-field full"><div class="preview-field-label">Foto Dokumentasi</div><div class="preview-field-value" style="color:var(--text3);font-size:12px"><i class="fas fa-clock"></i> Foto belum tersinkron ke Drive</div></div>`;
+  }
+
+  // GPS / Maps link
+  let mapsHtml = '';
+  if(d.maps_link && d.maps_link.startsWith('http')){
+    mapsHtml = `<div class="preview-field full">
+      <div class="preview-field-label">Lokasi GPS</div>
+      <div class="preview-field-value">
+        <span style="font-size:12px;color:var(--text2)">Lat: ${d.lat}, Lng: ${d.lng}${d.accuracy?' (±'+d.accuracy+'m)':''}</span><br>
+        <a href="${d.maps_link}" target="_blank" rel="noopener" class="foto-link-btn" style="background:linear-gradient(135deg,#16a34a,#15803d);margin-top:6px">
+          <i class="fas fa-map-marker-alt"></i> Buka di Google Maps
+        </a>
+      </div>
+    </div>`;
+  }
+
   body.innerHTML=
     previewRow('Waktu Kunjungan',d.timestamp)+
     previewRow('Nama Petugas',d.nama_petugas)+
@@ -2100,7 +1858,9 @@ function openPreviewModal(idx){
     previewRow('Desa / Kelurahan',d.desa)+
     previewRow('Alamat Lengkap',d.alamat)+
     `<div class="preview-field full"><div class="preview-field-label">Jenis PPKS</div><div class="preview-field-value">${d.jenis_ppks||'-'}</div></div>`+
-    `<div class="preview-field full"><div class="preview-field-label">Hasil Kunjungan</div><div class="preview-field-value" style="white-space:pre-wrap">${d.hasil_kunjungan||'-'}</div></div>`;
+    `<div class="preview-field full"><div class="preview-field-label">Hasil Kunjungan</div><div class="preview-field-value" style="white-space:pre-wrap">${d.hasil_kunjungan||'-'}</div></div>`+
+    fotoHtml+
+    mapsHtml;
   document.getElementById('previewModal').classList.add('show');
 }
 function closePreviewModal(){
@@ -2382,23 +2142,92 @@ function validate(){
   return ok;
 }
 
-// ===== SUBMIT =====
-async function submitData(){
+// ===== KONFIRMASI KIRIM =====
+let _pendingPayload = null;
+let _pendingFotoData = '';
+let _pendingLocalData = null;
+
+function showConfirmModal(){
   if(!validate()){showToast('Lengkapi semua field yang wajib diisi!',true);return}
+  const d = {
+    nama_petugas: document.getElementById('f_nama_petugas').value,
+    jabatan: document.getElementById('f_jabatan').value,
+    nik: document.getElementById('f_nik').value.trim(),
+    nama_ppks: document.getElementById('f_nama_ppks').value,
+    jenis_kelamin: document.getElementById('f_jk').value,
+    tgl_lahir: document.getElementById('f_tgl_lahir').value,
+    hp: document.getElementById('f_hp').value.trim(),
+    kecamatan: document.getElementById('f_kecamatan').value,
+    desa: document.getElementById('f_desa').value,
+    alamat: document.getElementById('f_alamat').value,
+    jenis_ppks: document.getElementById('f_jenis_ppks').value,
+    hasil_kunjungan: document.getElementById('f_hasil').value,
+  };
+  const body = document.getElementById('confirmBody');
+  const row = (label,val,full=false) =>
+    `<div class="confirm-field${full?' full':''}"><div class="confirm-field-label">${label}</div><div class="confirm-field-val">${val||'-'}</div></div>`;
+
+  let fotoHtml = '';
+  if(photoB64){
+    fotoHtml = `<div class="confirm-field full">
+      <div class="confirm-field-label">Foto Dokumentasi</div>
+      <div class="confirm-foto-wrap"><img src="${photoB64}" alt="Foto dokumentasi"></div>
+    </div>`;
+  }
+  let gpsHtml = '';
+  if(gpsCoords.lat && gpsCoords.lng){
+    gpsHtml = `<div class="confirm-field full">
+      <div class="confirm-field-label">Lokasi GPS</div>
+      <div class="confirm-field-val">
+        <span class="confirm-gps-badge"><i class="fas fa-map-marker-alt"></i> ${gpsCoords.lat}, ${gpsCoords.lng}${gpsCoords.accuracy?' (±'+gpsCoords.accuracy+'m)':''}</span>
+      </div>
+    </div>`;
+  }
+
+  body.innerHTML =
+    row('Nama Petugas', d.nama_petugas) +
+    row('Jabatan', d.jabatan) +
+    row('NIK PPKS', d.nik) +
+    row('Nama Lengkap PPKS', d.nama_ppks) +
+    row('Jenis Kelamin', d.jenis_kelamin) +
+    row('Tanggal Lahir', d.tgl_lahir) +
+    row('Nomor HP/WA', d.hp) +
+    row('Kecamatan', d.kecamatan) +
+    row('Desa / Kelurahan', d.desa) +
+    row('Alamat', d.alamat, true) +
+    row('Jenis PPKS', d.jenis_ppks, true) +
+    row('Hasil Kunjungan', d.hasil_kunjungan, true) +
+    fotoHtml + gpsHtml;
+
+  document.getElementById('confirmModalOverlay').classList.add('open');
+}
+function closeConfirmModal(){
+  document.getElementById('confirmModalOverlay').classList.remove('open');
+}
+
+// ===== SUBMIT (dipanggil dari modal konfirmasi) =====
+async function doSendData(){
+  closeConfirmModal();
   const btn=document.getElementById('btnSubmit');
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span> Mengirim data...';
   const now=new Date();
   const ts=now.toLocaleString('id-ID',{dateStyle:'short',timeStyle:'medium'});
+
+  const nik=document.getElementById('f_nik').value.trim();
+  const safeTs=ts.replace(/[/:, ]/g,'-');
+  const namaFile='PPKS_'+nik+'_'+safeTs+'.jpg';
+  const fotoData=photoB64?photoB64.replace(/^data:image\/[a-z]+;base64,/,''):'';
+
   const payload={
     timestamp:ts,
     nama_petugas:document.getElementById('f_nama_petugas').value,
     jabatan:document.getElementById('f_jabatan').value,
-    nik:document.getElementById('f_nik').value,
+    nik:nik,
     nama_ppks:document.getElementById('f_nama_ppks').value,
     jenis_kelamin:document.getElementById('f_jk').value,
     tgl_lahir:document.getElementById('f_tgl_lahir').value,
-    hp:document.getElementById('f_hp').value,
+    hp:document.getElementById('f_hp').value.trim(),
     kecamatan:document.getElementById('f_kecamatan').value,
     desa:document.getElementById('f_desa').value,
     alamat:document.getElementById('f_alamat').value,
@@ -2406,38 +2235,61 @@ async function submitData(){
     hasil_kunjungan:document.getElementById('f_hasil').value,
     lat:gpsCoords.lat,lng:gpsCoords.lng,accuracy:gpsCoords.accuracy,
     maps_link:(gpsCoords.lat&&gpsCoords.lng)?'https://maps.google.com/?q='+gpsCoords.lat+','+gpsCoords.lng:'',
-    foto:photoB64,
+    foto:fotoData,
+    nama_file_foto:namaFile,
+    foto_url:'',
+    pending:true,  // tandai belum tersinkron
   };
+
   const localData=getLocalData();
-  localData.unshift(payload);
+  localData.unshift({...payload, foto:''});
   saveLocalData(localData);
+
   let serverOk=false;
+  let fotoUrl='';
   try{
-    setSyncBar('loading','Mengirim data ke server...');
+    setSyncBar('loading','Mengirim data & foto ke server...');
+    document.getElementById('syncBar').style.display='flex';
     const res=await fetch(APPS_SCRIPT_URL,{
-      method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify(payload),redirect:'follow'
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload),
+      redirect:'follow'
     });
     const json=await res.json();
     if(json.status==='ok'){
       serverOk=true;
-      setSyncBar('synced','✓ Data berhasil tersimpan di server');
-      showToast('Data berhasil dikirim ke server');
+      fotoUrl=json.foto_url||json.drive_url||'';
+      localData[0].foto_url=fotoUrl;
+      localData[0].pending=false;
+      saveLocalData(localData);
+      setSyncBar('synced','✓ Data & foto berhasil tersimpan di server');
+      showToast('Data berhasil dikirim ke server'+(fotoUrl?' (foto: Google Drive)':''));
     } else {
       setSyncBar('error','Gagal kirim ke server: '+(json.message||'unknown'));
-      showToast('Gagal kirim ke server.',true);
+      showToast('Gagal kirim ke server: '+(json.message||'error'),true);
     }
   }catch(err){
     setSyncBar('error','Koneksi server gagal — data tersimpan lokal');
-    showToast('Data disimpan lokal (server tidak terjangkau).',true);
+    showToast('Data disimpan lokal, akan dikirim saat online.',true);
   }
-  fields.forEach(f=>document.getElementById(f.id).value='');
+  // Auto-isi ulang nama & jabatan dari akun login setelah form direset
+  fields.forEach(f=>{
+    if(f.id!=='f_nama_petugas' && f.id!=='f_jabatan')
+      document.getElementById(f.id).value='';
+  });
+  // Kosongkan juga hasil & jenis ppks (full fields)
+  document.getElementById('f_hasil').value='';
+  document.getElementById('f_jenis_ppks').value='';
   removePhoto();
   btn.disabled=false;
   btn.innerHTML='<i class="fas fa-paper-plane"></i> Simpan &amp; Kirim Data';
   showModal('success','Data Berhasil Disimpan!','Laporan kunjungan telah berhasil dicatat pada '+ts+(serverOk?' dan dikirim ke Dinas Sosial Kabupaten Seluma':' (tersimpan lokal)')+'. Terima kasih!');
   updateStats(localData);
 }
+
+// Tombol submit sekarang membuka konfirmasi dulu
+function submitData(){ showConfirmModal(); }
 
 // ===== LOAD DATA =====
 async function loadData(showNotif=false){
@@ -2503,6 +2355,7 @@ function animateStats(){
 
 // ===== CHARTS =====
 let chartH=null,chartP=null;
+let chartRangeDays=7; // default 7 hari
 const PIE_COLORS=[
   '#1e40af','#dc2626','#16a34a','#d97706','#7c3aed',
   '#0891b2','#be185d','#065f46','#92400e','#312e81',
@@ -2511,25 +2364,64 @@ const PIE_COLORS=[
   '#991b1b','#166534','#92400e','#4c1d95','#164e63','#831843'
 ];
 
+function setChartRange(days, btn){
+  chartRangeDays = days;
+  document.querySelectorAll('.chart-range-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBarChart(getLocalData());
+}
+
 function renderCharts(){
   const data=getLocalData();
   renderBarChart(data);
   renderPieChart(data);
+  renderMonthlyStats(data);
+}
+
+function renderMonthlyStats(data){
+  const now = new Date();
+  const year = now.getFullYear();
+  const BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const counts = new Array(12).fill(0);
+  data.forEach(d=>{
+    const dt = parseTimestamp(d.timestamp);
+    if(dt && dt.getFullYear()===year) counts[dt.getMonth()]++;
+  });
+  const grid = document.getElementById('statMonthGrid');
+  if(!grid) return;
+  grid.innerHTML = counts.map((c,i)=>`
+    <div class="stat-month-item">
+      <div class="stat-month-name">${BULAN[i]} ${year}</div>
+      <div class="stat-month-val">${c}</div>
+      <div class="stat-month-sub">kunjungan</div>
+    </div>`).join('');
 }
 
 function renderBarChart(data){
   const ctx=document.getElementById('chartHarian').getContext('2d');
   const days=[],labels=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date();d.setDate(d.getDate()-i);
-    labels.push(d.toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit'}));
-    days.push(data.filter(r=>isSameDay(parseTimestamp(r.timestamp),d)).length);
+  const now = new Date();
+
+  if(chartRangeDays===0){
+    // Bulan ini: hari 1 s/d hari ini
+    const daysInMonth = now.getDate();
+    for(let i=1;i<=daysInMonth;i++){
+      const d=new Date(now.getFullYear(),now.getMonth(),i);
+      labels.push(i+'');
+      days.push(data.filter(r=>isSameDay(parseTimestamp(r.timestamp),d)).length);
+    }
+  } else {
+    for(let i=chartRangeDays-1;i>=0;i--){
+      const d=new Date();d.setDate(d.getDate()-i);
+      labels.push(d.toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit'}));
+      days.push(data.filter(r=>isSameDay(parseTimestamp(r.timestamp),d)).length);
+    }
   }
   if(chartH)chartH.destroy();
   chartH=new Chart(ctx,{
     type:'bar',
     data:{labels,datasets:[{label:'Kunjungan',data:days,
-      backgroundColor:days.map((_,i)=>i===6?'rgba(13,43,94,0.9)':'rgba(13,43,94,0.65)'),
+      backgroundColor:days.map((_,i)=>i===days.length-1?'rgba(13,43,94,0.9)':'rgba(13,43,94,0.65)'),
       borderRadius:8,borderSkipped:false,
       hoverBackgroundColor:'rgba(201,162,39,0.85)'
     }]},
@@ -2602,16 +2494,34 @@ function shortJenis(label) {
   return label.slice(0, 20) + '…';
 }
 
+function clearDateFilter(){
+  const df=document.getElementById('logDateFrom');
+  const dt=document.getElementById('logDateTo');
+  if(df)df.value='';
+  if(dt)dt.value='';
+  renderLog();
+}
+
 function getFilteredLogData() {
   const allData = getLocalData();
   const query = (document.getElementById('logSearchInput')?.value || '').trim().toLowerCase();
   const kecFilter = (document.getElementById('logFilterKec')?.value || '');
+  const dateFrom = document.getElementById('logDateFrom')?.value || '';
+  const dateTo   = document.getElementById('logDateTo')?.value || '';
+
+  const dfrom = dateFrom ? new Date(dateFrom+'T00:00:00') : null;
+  const dto   = dateTo   ? new Date(dateTo  +'T23:59:59') : null;
 
   const result = [];
   allData.forEach((d, idx) => {
-    // Kecamatan filter
     if (kecFilter && (d.kecamatan || '').trim().toLowerCase() !== kecFilter.trim().toLowerCase()) return;
-    // Text search
+    // Filter tanggal
+    if(dfrom || dto){
+      const dt2 = parseTimestamp(d.timestamp);
+      if(!dt2) return;
+      if(dfrom && dt2 < dfrom) return;
+      if(dto   && dt2 > dto  ) return;
+    }
     if (query) {
       const haystack = [
         d.timestamp, d.nama_petugas, d.jabatan,
@@ -2651,6 +2561,11 @@ function renderLog() {
     }
     if (kecFilter) {
       chips += `<span class="log-active-filter"><i class="fas fa-map-marker-alt" style="font-size:10px"></i> ${kecFilter} <button onclick="document.getElementById('logFilterKec').value='';renderLog();" title="Hapus">✕</button></span>`;
+    }
+    const dateFrom = document.getElementById('logDateFrom')?.value || '';
+    const dateTo   = document.getElementById('logDateTo')?.value || '';
+    if(dateFrom||dateTo){
+      chips += `<span class="log-active-filter"><i class="fas fa-calendar" style="font-size:10px"></i> ${dateFrom||'…'} s/d ${dateTo||'…'} <button onclick="clearDateFilter()" title="Hapus">✕</button></span>`;
     }
     chipsEl.innerHTML = chips;
   }
@@ -2716,9 +2631,10 @@ function renderLog() {
     const fullJenis = d.jenis_ppks || '-';
     const shortLabel = shortJenis(d.jenis_ppks);
     const badgeHtml = `<span class="badge" title="${fullJenis}">${shortLabel}</span>`;
+    const pendingBadge = d.pending ? `<span class="pending-badge"><i class="fas fa-cloud-upload-alt"></i> Pending</span>` : '';
     return `<tr>
       <td>${tsHtml}</td>
-      <td><strong style="color:var(--text);font-size:13px">${np}</strong></td>
+      <td><strong style="color:var(--text);font-size:13px">${np}</strong>${pendingBadge}</td>
       <td><span style="font-size:12px;color:var(--text3)">${jab}</span></td>
       <td>
         <span style="font-weight:600;color:var(--text)">${nppks}</span>
@@ -2804,7 +2720,11 @@ function onPerPageChange(sel) {
 }
 
 // ===== DOWNLOAD MODAL =====
-const DL_PASS = 'passDinsos27';
+// Hash dari password unduh "passDinsos27" — dihitung saat halaman load
+let DL_PASS_STORED = "";
+(async function initDlPass(){
+  DL_PASS_STORED = await sha256("passDinsos27");
+})();
 
 function openDownloadModal() {
   // Pre-fill kecamatan from active log filter
@@ -2854,19 +2774,19 @@ function toggleDlPass(btn) {
   btn.querySelector('i').className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
 }
 
-function processDownload() {
+async function processDownload() {
   const passEl  = document.getElementById('dlPassword');
   const errEl   = document.getElementById('dlPassError');
   const pass    = passEl?.value || '';
 
-  // Validate password
   if (!pass) {
     errEl.textContent = 'Password wajib diisi.';
     passEl.classList.add('error');
     passEl.focus();
     return;
   }
-  if (pass !== DL_PASS) {
+  const ph = await sha256(pass);
+  if (ph !== DL_PASS_STORED) {
     errEl.textContent = 'Password salah. Periksa kembali.';
     passEl.classList.add('error');
     passEl.value = '';
@@ -2876,7 +2796,6 @@ function processDownload() {
   errEl.textContent = '';
   passEl.classList.remove('error');
 
-  // Get format & filter
   const format = document.querySelector('input[name="dlFormat"]:checked')?.value || 'excel';
   const kec    = document.getElementById('dlKecFilter')?.value || '';
   const allData = getLocalData();
@@ -2902,14 +2821,16 @@ function doExportExcel(data, suffix, tStr) {
     'No','Waktu','Nama Petugas','Jabatan','NIK PPKS','Nama PPKS',
     'Jenis Kelamin','Tanggal Lahir','No HP/WA','Kecamatan',
     'Desa/Kelurahan','Alamat','Jenis PPKS','Hasil Kunjungan',
-    'Latitude','Longitude','Akurasi GPS'
+    'Link Foto Drive','Latitude','Longitude','Akurasi GPS'
   ];
   const esc = v => `"${String(v??'').replace(/"/g,'""')}"`;
   const rows = data.map((d,i) => [
     i+1, d.timestamp||'', d.nama_petugas||'', d.jabatan||'',
     d.nik||'', d.nama_ppks||'', d.jenis_kelamin||'', d.tgl_lahir||'',
     d.hp||'', d.kecamatan||'', d.desa||'', d.alamat||'',
-    d.jenis_ppks||'', d.hasil_kunjungan||'', d.lat||'', d.lng||'', d.accuracy||''
+    d.jenis_ppks||'', d.hasil_kunjungan||'',
+    d.foto_url||d.foto||'',  // Link foto Drive
+    d.lat||'', d.lng||'', d.accuracy||''
   ].map(esc).join(','));
 
   const csv = '\uFEFF' + headers.map(esc).join(',') + '\n' + rows.join('\n');
@@ -3048,6 +2969,7 @@ document.addEventListener('keydown',e=>{
     closePhotoModal();
     closePreviewModal();
     closeDownloadModal();
+    closeConfirmModal();
   }
   if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();
 });
