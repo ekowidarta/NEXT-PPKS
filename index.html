@@ -1676,7 +1676,7 @@ tbody td:last-child{text-align:center}
 // ============================================================
 //  KONFIGURASI
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHLaV6Cfkx4BSdgFlmm3Q3xIBW9EMCPS2dJMdXeGo8xy1HBzbmaqzSrLte7Cn5Q94rZg/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkLmeN-T0OwXjy1PE_MROI1S7PUvMmkSqxmj_K0M2NFDA8xFbnaZiOuhj_IpvEkUpGbA/exec";
 
 
 // ===== PAGE TRANSITION =====
@@ -1962,10 +1962,8 @@ function openPreviewModal(idx){
   function cleanFotoUrl(raw){
     if(!raw || !raw.trim()) return '';
     const s = raw.trim();
-    // Format formula: =HYPERLINK("https://...","...")
     const m = s.match(/HYPERLINK\("(https?:\/\/[^"]+)"/i);
     if(m) return m[1];
-    // URL langsung
     if(s.startsWith('http')) return s;
     return '';
   }
@@ -1973,59 +1971,81 @@ function openPreviewModal(idx){
   const fotoUrl  = cleanFotoUrl(d.foto_url  || d.foto  || '');
   const foto2Url = cleanFotoUrl(d.foto2_url || d.foto2 || '');
 
-  // Konversi URL Drive share → URL embed thumbnail langsung
+  // Cek sessionStorage untuk preview base64 sementara
+  let previewB64_0 = '', previewB64_1 = '';
+  if(!fotoUrl || !foto2Url){
+    try{
+      const pk = d._previewKey || '';
+      if(pk){
+        const prev = JSON.parse(sessionStorage.getItem(pk)||'{}');
+        previewB64_0 = prev.foto0 || '';
+        previewB64_1 = prev.foto1 || '';
+      }
+    }catch(e){}
+  }
+
+  // Konversi URL Drive share → URL embed thumbnail
   function driveEmbedUrl(shareUrl){
     if(!shareUrl || !shareUrl.startsWith('http')) return '';
-    // Format: /file/d/FILE_ID/view
     let m = shareUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
     if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w800';
-    // Format: id=FILE_ID
     m = shareUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w800';
     return '';
   }
 
-  function makeFotoCard(shareUrl, label){
-    // Kosong = tidak ada foto, tidak ditampilkan
-    if(!shareUrl) return '';
+  function makeFotoCard(shareUrl, b64fallback, label){
+    // Gunakan URL Drive jika tersedia
     const embedUrl = driveEmbedUrl(shareUrl);
     if(embedUrl){
       return `<div style="flex:1;min-width:180px;max-width:320px">
         <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">${label}</div>
         <a href="${shareUrl}" target="_blank" rel="noopener" style="display:block;border-radius:12px;overflow:hidden;border:2px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12)">
-          <img src="${embedUrl}"
-            alt="${label}"
-            style="width:100%;display:block;object-fit:cover;cursor:zoom-in;transition:transform 0.25s"
+          <img src="${embedUrl}" alt="${label}"
+            style="width:100%;display:block;object-fit:cover;cursor:zoom-in;transition:transform 0.25s;min-height:120px;background:#f1f5f9"
             onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'"
-            onerror="this.parentElement.style.display='none';this.closest('div').querySelector('.foto-err').style.display='flex'">
+            onmouseout="this.style.transform='scale(1)'">
         </a>
-        <div class="foto-err" style="display:none;align-items:center;justify-content:center;gap:8px;padding:20px;background:#f1f5f9;border-radius:10px;font-size:12px;color:var(--text3)">
-          <i class="fas fa-image"></i> Gambar tidak dapat dimuat
-        </div>
         <a href="${shareUrl}" target="_blank" rel="noopener"
           style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;font-weight:700;color:#0891b2;text-decoration:none">
           <i class="fas fa-external-link-alt"></i> Buka di Google Drive
         </a>
       </div>`;
     }
+    // Fallback: tampilkan base64 dari sessionStorage (foto baru yang belum sync Drive)
+    if(b64fallback){
+      return `<div style="flex:1;min-width:180px;max-width:320px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">${label}</div>
+        <div style="border-radius:12px;overflow:hidden;border:2px solid #fde68a;box-shadow:0 4px 14px rgba(0,0,0,0.1)">
+          <img src="${b64fallback}" alt="${label}"
+            style="width:100%;display:block;object-fit:cover">
+        </div>
+        <div style="margin-top:6px;font-size:10px;color:#92400e;display:flex;align-items:center;gap:4px">
+          <i class="fas fa-clock"></i> Preview lokal — akan tersedia di Drive setelah tersinkron
+        </div>
+      </div>`;
+    }
     return '';
   }
 
-  const card1 = makeFotoCard(fotoUrl,  'Foto Dokumentasi 1');
-  const card2 = makeFotoCard(foto2Url, 'Foto Dokumentasi 2');
+  const card1 = makeFotoCard(fotoUrl,  previewB64_0, 'Foto Dokumentasi 1');
+  const card2 = makeFotoCard(foto2Url, previewB64_1, 'Foto Dokumentasi 2');
+
+  // Identitas unik data untuk reload (tidak bergantung pada idx yang bisa berubah)
+  const _ts  = encodeURIComponent(d.timestamp||'');
+  const _nik = encodeURIComponent(d.nik||'');
+
   if(card1 || card2){
     fotoHtml = `<div class="preview-field full">
       <div class="preview-field-label">Foto Dokumentasi</div>
       <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:10px">${card1}${card2}</div>
     </div>`;
   } else {
-    // Tidak ada URL foto — tampilkan info & tombol muat ulang
     fotoHtml = `<div class="preview-field full">
       <div class="preview-field-label">Foto Dokumentasi</div>
       <div style="padding:14px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
         <span><i class="fas fa-info-circle"></i> Foto tersimpan di server. Klik <b>Muat Ulang</b> untuk menampilkannya.</span>
-        <button onclick="loadData(false).then(()=>{ closePreviewModal(); setTimeout(()=>openPreviewModal(${idx}),200); })"
+        <button onclick="reloadAndOpen('${_ts}','${_nik}')"
           style="padding:7px 14px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">
           <i class="fas fa-sync-alt"></i> Muat Ulang
         </button>
@@ -2067,6 +2087,17 @@ function openPreviewModal(idx){
 }
 function closePreviewModal(){
   document.getElementById('previewModal').classList.remove('show');
+}
+// Muat ulang dari server lalu buka ulang Detail berdasarkan timestamp+nik (bukan idx)
+async function reloadAndOpen(ts, nik){
+  closePreviewModal();
+  await loadData(false);
+  const data = getLocalData();
+  const newIdx = data.findIndex(d =>
+    encodeURIComponent(d.timestamp||'') === ts &&
+    encodeURIComponent(d.nik||'') === nik
+  );
+  setTimeout(()=> openPreviewModal(newIdx >= 0 ? newIdx : 0), 200);
 }
 
 // ===== EDIT MODAL =====
@@ -2459,7 +2490,15 @@ async function doSendData(){
   };
 
   const localData=getLocalData();
-  localData.unshift({...payload, foto:'', foto2:''});
+  // Simpan base64 sementara di sessionStorage (hanya sesi ini) untuk preview langsung
+  const previewKey = 'nx_foto_preview_' + nik + '_' + safeTs;
+  try {
+    const previewObj = {};
+    if(photoB64[0]) previewObj.foto0 = photoB64[0];
+    if(photoB64[1]) previewObj.foto1 = photoB64[1];
+    if(Object.keys(previewObj).length) sessionStorage.setItem(previewKey, JSON.stringify(previewObj));
+  } catch(e){}
+  localData.unshift({...payload, foto:'', foto2:'', _previewKey: previewKey});
   saveLocalData(localData);
 
   let serverOk=false;
