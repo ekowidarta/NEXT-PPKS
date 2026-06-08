@@ -1955,28 +1955,70 @@ function openPreviewModal(idx){
   if(!d)return;
   const body=document.getElementById('previewBody');
 
-  // Buat baris foto — tampilkan link Drive jika ada
+  // Buat baris foto — tampilkan gambar langsung jika ada URL Drive
   let fotoHtml = '';
-  const fotoUrl  = d.foto_url  || d.foto  || '';
-  const foto2Url = d.foto2_url || d.foto2 || '';
+  const fotoUrl  = d.foto_url  || '';
+  const foto2Url = d.foto2_url || '';
 
-  const makeFotoLink = (url, label) => {
-    if(url && url.startsWith('http')){
-      return `<a href="${url}" target="_blank" rel="noopener" class="foto-link-btn" style="margin-right:6px;margin-bottom:4px">
-        <i class="fas fa-external-link-alt"></i> ${label}
-      </a>`;
-    } else if(url && !url.startsWith('http')){
-      return `<span style="color:var(--text3);font-size:12px"><i class="fas fa-clock"></i> ${label} belum tersinkron ke Drive</span><br>`;
+  // Konversi URL Drive share → URL embed thumbnail langsung
+  function driveEmbedUrl(shareUrl){
+    if(!shareUrl || !shareUrl.startsWith('http')) return '';
+    const m = shareUrl.match(/\/file\/d\/([^/]+)/);
+    if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w600';
+    return '';
+  }
+
+  function makeFotoCard(shareUrl, label){
+    // Kosong = tidak ada foto sama sekali, tidak ditampilkan
+    if(!shareUrl || !shareUrl.trim()) return '';
+    const embedUrl = driveEmbedUrl(shareUrl);
+    if(embedUrl){
+      return `<div style="flex:1;min-width:200px;max-width:320px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px">${label}</div>
+        <a href="${shareUrl}" target="_blank" rel="noopener" style="display:block">
+          <img src="${embedUrl}"
+            alt="${label}"
+            style="width:100%;border-radius:10px;border:2px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12);object-fit:cover;cursor:zoom-in;transition:transform 0.2s"
+            onmouseover="this.style.transform='scale(1.02)'"
+            onmouseout="this.style.transform='scale(1)'"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;align-items:center;justify-content:center;gap:8px;padding:14px;background:#f1f5f9;border-radius:10px;font-size:12px;color:var(--text3)">
+            <i class="fas fa-image"></i> Gagal memuat gambar
+          </div>
+        </a>
+        <a href="${shareUrl}" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;font-weight:700;color:#0891b2;text-decoration:none">
+          <i class="fas fa-external-link-alt"></i> Buka di Google Drive
+        </a>
+      </div>`;
+    }
+    // URL ada tapi bukan http → benar-benar pending (misal error upload sebelumnya)
+    if(!shareUrl.startsWith('http')){
+      return `<div style="flex:1;min-width:200px">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px">${label}</div>
+        <div style="padding:14px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e">
+          <i class="fas fa-clock"></i> Foto belum tersinkron ke Drive
+        </div>
+      </div>`;
     }
     return '';
-  };
+  }
 
-  const linkF1 = makeFotoLink(fotoUrl,  'Buka Foto 1 di Drive');
-  const linkF2 = makeFotoLink(foto2Url, 'Buka Foto 2 di Drive');
-  if(linkF1 || linkF2){
+  const card1 = makeFotoCard(fotoUrl,  'Foto Dokumentasi 1');
+  const card2 = makeFotoCard(foto2Url, 'Foto Dokumentasi 2');
+  if(card1 || card2){
     fotoHtml = `<div class="preview-field full">
       <div class="preview-field-label">Foto Dokumentasi</div>
-      <div class="preview-field-value" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">${linkF1}${linkF2}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px">${card1}${card2}</div>
+    </div>`;
+  } else if(d.pending){
+    // Data belum berhasil dikirim ke server sama sekali
+    fotoHtml = `<div class="preview-field full">
+      <div class="preview-field-label">Foto Dokumentasi</div>
+      <div style="padding:12px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px">
+        <i class="fas fa-wifi" style="font-size:14px"></i>
+        <span>Data belum terkirim ke server. Foto akan tersedia setelah data berhasil dikirim dan tersinkron.</span>
+      </div>
     </div>`;
   }
 
@@ -2406,7 +2448,7 @@ async function doSendData(){
   };
 
   const localData=getLocalData();
-  localData.unshift({...payload, foto:''});
+  localData.unshift({...payload, foto:'', foto2:''});
   saveLocalData(localData);
 
   let serverOk=false;
