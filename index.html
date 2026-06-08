@@ -2522,9 +2522,16 @@ async function doSendData(){
       saveLocalData(localData);
       setSyncBar('synced','✓ Data & foto berhasil tersimpan di server');
       showToast('Data berhasil dikirim ke server'+(fotoUrl?' (foto: Google Drive)':''));
+      // === DEBUG: tampilkan respons server ===
+      dbg('SERVER RESPONSE OK',{
+        foto_url: json.foto_url||'(kosong)',
+        foto2_url: json.foto2_url||'(kosong)',
+        row: json.row||'-'
+      });
     } else {
       setSyncBar('error','Gagal kirim ke server: '+(json.message||'unknown'));
       showToast('Gagal kirim ke server: '+(json.message||'error'),true);
+      dbg('SERVER RESPONSE ERROR', json);
     }
   }catch(err){
     setSyncBar('error','Koneksi server gagal — data tersimpan lokal');
@@ -2571,7 +2578,45 @@ async function loadData(showNotif=false){
   if(document.getElementById('tabLog').style.display!=='none') renderLog();
 }
 
-// ===== TIMESTAMP PARSER =====
+// ===== DEBUG PANEL =====
+function dbg(label, obj){
+  const panel = document.getElementById('_dbgPanel');
+  if(!panel) return;
+  panel.style.display='block';
+  const ts = new Date().toLocaleTimeString('id-ID');
+  const row = document.createElement('div');
+  row.style.cssText='border-bottom:1px solid #334155;padding:8px 0;font-size:11px';
+  row.innerHTML = `<b style="color:#7dd3fc">[${ts}] ${label}</b><pre style="margin:4px 0 0;color:#e2e8f0;white-space:pre-wrap;word-break:break-all">${JSON.stringify(obj,null,2)}</pre>`;
+  panel.querySelector('#_dbgLog').prepend(row);
+}
+function dbgShowLocal(){
+  const data = getLocalData();
+  const first = data[0]||{};
+  dbg('LOCALSTORAGE [0]',{
+    foto_url:  first.foto_url  || '(kosong)',
+    foto2_url: first.foto2_url || '(kosong)',
+    pending:   first.pending,
+    _previewKey: first._previewKey||'(none)',
+    nama_ppks: first.nama_ppks||'-'
+  });
+}
+async function dbgTestServer(){
+  dbg('FETCH SERVER (doGet)','Mengambil data dari server...');
+  try{
+    const res = await fetch(APPS_SCRIPT_URL+'?t='+Date.now());
+    const json = await res.json();
+    const first = (json.data||[])[0]||{};
+    dbg('SERVER doGet [0]',{
+      foto_url:  first.foto_url  || '(kosong)',
+      foto2_url: first.foto2_url || '(kosong)',
+      nama_ppks: first.nama_ppks || '-',
+      timestamp: first.timestamp || '-'
+    });
+  }catch(err){
+    dbg('SERVER doGet ERROR', err.toString());
+  }
+}
+
 function parseTimestamp(ts){
   if(!ts)return null;
   try{
@@ -3232,5 +3277,18 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.getElementById('loginPage').style.display!=='none')doLogin();
 });
 </script>
+
+<!-- ===== DEBUG PANEL ===== -->
+<div id="_dbgPanel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#0f172a;border-top:2px solid #3b82f6;max-height:50vh;overflow-y:auto;font-family:monospace">
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#1e293b;position:sticky;top:0;z-index:1">
+    <span style="color:#7dd3fc;font-weight:700;font-size:12px">🔍 DEBUG PANEL — Foto Troubleshoot</span>
+    <button onclick="dbgShowLocal()" style="padding:3px 10px;background:#1d4ed8;color:white;border:none;border-radius:5px;font-size:11px;cursor:pointer;font-family:monospace">📦 Cek localStorage</button>
+    <button onclick="dbgTestServer()" style="padding:3px 10px;background:#0f766e;color:white;border:none;border-radius:5px;font-size:11px;cursor:pointer;font-family:monospace">🌐 Cek Server</button>
+    <button onclick="document.getElementById('_dbgPanel').style.display='none'" style="margin-left:auto;padding:3px 10px;background:#7f1d1d;color:white;border:none;border-radius:5px;font-size:11px;cursor:pointer;font-family:monospace">✕ Tutup</button>
+  </div>
+  <div id="_dbgLog" style="padding:8px 12px"></div>
+</div>
+<button onclick="document.getElementById('_dbgPanel').style.display='block';dbgShowLocal();" style="position:fixed;bottom:12px;left:12px;z-index:99998;background:#1e293b;color:#7dd3fc;border:1px solid #3b82f6;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:monospace;box-shadow:0 2px 8px rgba(0,0,0,0.4)">🔍 DEBUG</button>
+
 </body>
 </html>
