@@ -2187,13 +2187,16 @@ async function saveEdit(){
   let serverOk = false;
   let serverMsg = '';
   try{
-    const res  = await fetch(APPS_SCRIPT_URL, {
-      method : 'POST',
-      headers: {'Content-Type':'text/plain;charset=utf-8'},
-      body   : JSON.stringify(payload),
-      redirect:'follow'
+    const json = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', APPS_SCRIPT_URL, true);
+      xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+      xhr.timeout = 60000;
+      xhr.onload  = () => { try{resolve(JSON.parse(xhr.responseText))}catch(e){reject(e)} };
+      xhr.onerror = () => reject(new Error('Network error'));
+      xhr.ontimeout=() => reject(new Error('Timeout'));
+      xhr.send(JSON.stringify(payload));
     });
-    const json = await res.json();
     if(json.status==='ok'){
       serverOk  = true;
       serverMsg = json.message || 'Data berhasil diperbarui di Google Sheets';
@@ -2506,13 +2509,25 @@ async function doSendData(){
   try{
     setSyncBar('loading','Mengirim data & foto ke server...');
     document.getElementById('syncBar').style.display='flex';
-    const res=await fetch(APPS_SCRIPT_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify(payload),
-      redirect:'follow'
+
+    // ─── PERBAIKAN UTAMA ───────────────────────────────────────────
+    // Apps Script Web App selalu redirect POST → body hilang jika pakai fetch biasa.
+    // Solusi: kirim via XMLHttpRequest yang menangani redirect dengan benar.
+    const json = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', APPS_SCRIPT_URL, true);
+      xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+      xhr.timeout = 60000; // 60 detik
+      xhr.onload = () => {
+        try { resolve(JSON.parse(xhr.responseText)); }
+        catch(e) { reject(new Error('Respons server tidak valid: ' + xhr.responseText.substring(0,200))); }
+      };
+      xhr.onerror  = () => reject(new Error('Koneksi gagal (network error)'));
+      xhr.ontimeout= () => reject(new Error('Server tidak merespons (timeout 60s)'));
+      xhr.send(JSON.stringify(payload));
     });
-    const json=await res.json();
+    // ──────────────────────────────────────────────────────────────
+
     if(json.status==='ok'){
       serverOk=true;
       fotoUrl=json.foto_url||json.drive_url||'';
@@ -2528,7 +2543,7 @@ async function doSendData(){
     }
   }catch(err){
     setSyncBar('error','Koneksi server gagal — data tersimpan lokal');
-    showToast('Data disimpan lokal, akan dikirim saat online.',true);
+    showToast('Data disimpan lokal, akan dikirim saat online. ('+err.message+')',true);
   }
   // Auto-isi ulang nama & jabatan dari akun login setelah form direset
   fields.forEach(f=>{
