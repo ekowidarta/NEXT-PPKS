@@ -1676,7 +1676,7 @@ tbody td:last-child{text-align:center}
 // ============================================================
 //  KONFIGURASI
 // ============================================================
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkLmeN-T0OwXjy1PE_MROI1S7PUvMmkSqxmj_K0M2NFDA8xFbnaZiOuhj_IpvEkUpGbA/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysAfYTHCrKHKIl3YpMjq__aTVWRF1oBYktN1GxLPtB2O3oMmHhvGElLCQPZy2HzTaSPQ/exec";
 
 
 // ===== PAGE TRANSITION =====
@@ -2461,8 +2461,8 @@ async function doSendData(){
   const safeTs=ts.replace(/[/:, ]/g,'-');
   const namaFile='PPKS_'+nik+'_'+safeTs+'.jpg';
   const namaFile2='PPKS_'+nik+'_'+safeTs+'_2.jpg';
-  const fotoData  = photoB64[0] ? photoB64[0].replace(/^data:image\/[a-z]+;base64,/,'') : '';
-  const fotoData2 = photoB64[1] ? photoB64[1].replace(/^data:image\/[a-z]+;base64,/,'') : '';
+  const fotoData  = photoB64[0] ? photoB64[0] : '';
+  const fotoData2 = photoB64[1] ? photoB64[1] : '';
 
   const payload={
     timestamp:ts,
