@@ -1378,10 +1378,10 @@ tbody td:last-child{text-align:center}
                 <div class="photo-slots-wrap">
                   <!-- SLOT FOTO 1 (Wajib) -->
                   <div class="photo-slot">
-                    <div class="photo-slot-badge"><i class="fas fa-camera"></i> Foto 1 &nbsp;<span style="color:var(--red)">*</span>&nbsp;Wajib</div>
+                    <div class="photo-slot-badge"><i class="fas fa-camera"></i> Foto PPKS &nbsp;<span style="color:var(--red)">*</span>&nbsp;Wajib</div>
                     <div class="photo-upload" onclick="showPhotoOptions(0)">
                       <div class="photo-upload-icon"><i class="fas fa-camera"></i></div>
-                      <div class="photo-upload-text">Ambil / Pilih Foto 1</div>
+                      <div class="photo-upload-text">Ambil / Pilih Foto</div>
                       <div class="photo-upload-sub">Kamera atau galeri &bull; Maks 5MB</div>
                     </div>
                     <div class="photo-preview" id="photoPreview_0">
@@ -1392,11 +1392,11 @@ tbody td:last-child{text-align:center}
                   </div>
                   <!-- SLOT FOTO 2 (Opsional) -->
                   <div class="photo-slot">
-                    <div class="photo-slot-badge optional"><i class="fas fa-image"></i> Foto 2 &nbsp;(Opsional)</div>
+                    <div class="photo-slot-badge optional"><i class="fas fa-image"></i> Foto Rumah &nbsp;(Opsional)</div>
                     <div class="photo-upload" onclick="showPhotoOptions(1)">
                       <div class="photo-upload-icon"><i class="fas fa-image"></i></div>
-                      <div class="photo-upload-text">Tambah Foto 2</div>
-                      <div class="photo-upload-sub">Opsional &bull; Kamera atau galeri</div>
+                      <div class="photo-upload-text">Ambil / Pilih Foto</div>
+                      <div class="photo-upload-sub">Kamera atau galeri &bull; Maks 5MB</div>
                     </div>
                     <div class="photo-preview" id="photoPreview_1">
                       <img id="photoThumb_1" alt="Preview foto 2">
@@ -1955,103 +1955,8 @@ function openPreviewModal(idx){
   if(!d)return;
   const body=document.getElementById('previewBody');
 
-  // Buat baris foto — tampilkan gambar langsung jika ada URL Drive
+  // Foto tidak ditampilkan di modal Detail
   let fotoHtml = '';
-
-  // Bersihkan nilai foto_url: bisa berupa URL murni, formula HYPERLINK, atau kosong
-  function cleanFotoUrl(raw){
-    if(!raw || !raw.trim()) return '';
-    const s = raw.trim();
-    const m = s.match(/HYPERLINK\("(https?:\/\/[^"]+)"/i);
-    if(m) return m[1];
-    if(s.startsWith('http')) return s;
-    return '';
-  }
-
-  const fotoUrl  = cleanFotoUrl(d.foto_url  || d.foto  || '');
-  const foto2Url = cleanFotoUrl(d.foto2_url || d.foto2 || '');
-
-  // Cek sessionStorage untuk preview base64 sementara
-  let previewB64_0 = '', previewB64_1 = '';
-  if(!fotoUrl || !foto2Url){
-    try{
-      const pk = d._previewKey || '';
-      if(pk){
-        const prev = JSON.parse(sessionStorage.getItem(pk)||'{}');
-        previewB64_0 = prev.foto0 || '';
-        previewB64_1 = prev.foto1 || '';
-      }
-    }catch(e){}
-  }
-
-  // Konversi URL Drive share → URL embed thumbnail
-  function driveEmbedUrl(shareUrl){
-    if(!shareUrl || !shareUrl.startsWith('http')) return '';
-    let m = shareUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-    if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w800';
-    m = shareUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if(m) return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w800';
-    return '';
-  }
-
-  function makeFotoCard(shareUrl, b64fallback, label){
-    // Gunakan URL Drive jika tersedia
-    const embedUrl = driveEmbedUrl(shareUrl);
-    if(embedUrl){
-      return `<div style="flex:1;min-width:180px;max-width:320px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">${label}</div>
-        <a href="${shareUrl}" target="_blank" rel="noopener" style="display:block;border-radius:12px;overflow:hidden;border:2px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,0.12)">
-          <img src="${embedUrl}" alt="${label}"
-            style="width:100%;display:block;object-fit:cover;cursor:zoom-in;transition:transform 0.25s;min-height:120px;background:#f1f5f9"
-            onmouseover="this.style.transform='scale(1.03)'"
-            onmouseout="this.style.transform='scale(1)'">
-        </a>
-        <a href="${shareUrl}" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;font-weight:700;color:#0891b2;text-decoration:none">
-          <i class="fas fa-external-link-alt"></i> Buka di Google Drive
-        </a>
-      </div>`;
-    }
-    // Fallback: tampilkan base64 dari sessionStorage (foto baru yang belum sync Drive)
-    if(b64fallback){
-      return `<div style="flex:1;min-width:180px;max-width:320px">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px">${label}</div>
-        <div style="border-radius:12px;overflow:hidden;border:2px solid #fde68a;box-shadow:0 4px 14px rgba(0,0,0,0.1)">
-          <img src="${b64fallback}" alt="${label}"
-            style="width:100%;display:block;object-fit:cover">
-        </div>
-        <div style="margin-top:6px;font-size:10px;color:#92400e;display:flex;align-items:center;gap:4px">
-          <i class="fas fa-clock"></i> Preview lokal — akan tersedia di Drive setelah tersinkron
-        </div>
-      </div>`;
-    }
-    return '';
-  }
-
-  const card1 = makeFotoCard(fotoUrl,  previewB64_0, 'Foto Dokumentasi 1');
-  const card2 = makeFotoCard(foto2Url, previewB64_1, 'Foto Dokumentasi 2');
-
-  // Identitas unik data untuk reload (tidak bergantung pada idx yang bisa berubah)
-  const _ts  = encodeURIComponent(d.timestamp||'');
-  const _nik = encodeURIComponent(d.nik||'');
-
-  if(card1 || card2){
-    fotoHtml = `<div class="preview-field full">
-      <div class="preview-field-label">Foto Dokumentasi</div>
-      <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:10px">${card1}${card2}</div>
-    </div>`;
-  } else {
-    fotoHtml = `<div class="preview-field full">
-      <div class="preview-field-label">Foto Dokumentasi</div>
-      <div style="padding:14px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;font-size:12px;color:#92400e;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <span><i class="fas fa-info-circle"></i> Foto tersimpan di server. Klik <b>Muat Ulang</b> untuk menampilkannya.</span>
-        <button onclick="reloadAndOpen('${_ts}','${_nik}')"
-          style="padding:7px 14px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">
-          <i class="fas fa-sync-alt"></i> Muat Ulang
-        </button>
-      </div>
-    </div>`;
-  }
 
   // GPS / Maps link
   let mapsHtml = '';
