@@ -552,6 +552,54 @@ tbody td:first-child{color:var(--text3);font-size:11.5px;white-space:nowrap}
 .toast.show{transform:translateX(0)}
 .toast.err{border-left-color:var(--red)}
 
+/* ===== STATUS TOGGLE BUTTON ===== */
+.btn-status-aktif{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border:none;border-radius:20px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all 0.2s;
+  background:#dcfce7;color:#16a34a;
+}
+.btn-status-aktif:hover{background:#bbf7d0;transform:translateY(-1px)}
+.btn-status-nonaktif{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border:none;border-radius:20px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all 0.2s;
+  background:#fee2e2;color:#dc2626;
+}
+.btn-status-nonaktif:hover{background:#fecaca;transform:translateY(-1px)}
+
+/* ===== INACTIVE PPKS BANNER ===== */
+.inactive-banner{
+  display:none;
+  margin-bottom:14px;
+  background:#fffbeb;border:1.5px solid #fcd34d;border-radius:14px;
+  padding:14px 18px;
+  gap:12px;align-items:flex-start;
+}
+.inactive-banner.visible{display:flex}
+.inactive-banner-icon{
+  font-size:20px;color:#d97706;flex-shrink:0;margin-top:1px;
+}
+.inactive-banner-body{flex:1}
+.inactive-banner-title{
+  font-size:13px;font-weight:800;color:#92400e;margin-bottom:3px;
+}
+.inactive-banner-sub{
+  font-size:12px;color:#a16207;line-height:1.5;
+}
+.inactive-banner-close{
+  background:none;border:none;cursor:pointer;
+  color:#a16207;font-size:14px;padding:2px 4px;
+  flex-shrink:0;margin-top:-2px;
+  transition:color 0.2s;
+}
+.inactive-banner-close:hover{color:#92400e}
+
+/* Row dimming for nonaktif entries */
+tr.row-nonaktif td{opacity:0.55}
+
 /* Tab transition */
 .tab-content{animation:tabFadeIn 0.35s ease forwards}
 @keyframes tabFadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -1486,6 +1534,20 @@ tbody td:last-child{text-align:center}
               </div>
             </div>
 
+            <!-- Banner: PPKS Nonaktif -->
+            <div class="inactive-banner" id="inactiveBanner">
+              <div class="inactive-banner-icon"><i class="fas fa-exclamation-triangle"></i></div>
+              <div class="inactive-banner-body">
+                <div class="inactive-banner-title">⚠️ Terdapat PPKS yang dinonaktifkan</div>
+                <div class="inactive-banner-sub" id="inactiveBannerSub">
+                  Beberapa PPKS telah dinonaktifkan dari sistem. Mohon segera tindak lanjuti dan hapus data tersebut dari database.
+                </div>
+              </div>
+              <button class="inactive-banner-close" title="Tutup" onclick="document.getElementById('inactiveBanner').classList.remove('visible')">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+
             <!-- Toolbar: Search + Filter Kecamatan + Filter Tanggal -->
             <div class="log-toolbar">
               <div class="log-search-wrap">
@@ -1535,10 +1597,11 @@ tbody td:last-child{text-align:center}
                   <th>Nama PPKS</th>
                   <th style="width:170px">Jenis PPKS</th>
                   <th style="width:130px">Kecamatan</th>
+                  <th style="width:100px">Status</th>
                   <th style="width:80px">Aksi</th>
                 </tr></thead>
                 <tbody id="logBody">
-                  <tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text3)">Belum ada data</td></tr>
+                  <tr><td colspan="8" style="text-align:center;padding:28px;color:var(--text3)">Belum ada data</td></tr>
                 </tbody>
               </table>
             </div>
@@ -2162,7 +2225,7 @@ function switchTab(name,el){
   tabEl.style.animation='';
   el.classList.add('active');
   if(name==='dashboard'){renderCharts();animateStats()}
-  if(name==='log'){logCurrentPage=1;renderLog()}
+  if(name==='log'){logCurrentPage=1;renderLog();updateInactiveBanner()}
 }
 
 // ===== GPS =====
@@ -2489,6 +2552,7 @@ async function loadData(showNotif=false){
   }
   updateStats(data);
   if(document.getElementById('tabLog').style.display!=='none') renderLog();
+  updateInactiveBanner();
 }
 
 // ===== TIMESTAMP PARSER =====
@@ -2751,13 +2815,13 @@ function renderLog() {
   const tb = document.getElementById('logBody');
   if (!total) {
     if (!allTotal) {
-      tb.innerHTML = `<tr><td colspan="7" class="no-result-row">
+      tb.innerHTML = `<tr><td colspan="8" class="no-result-row">
         <i class="fas fa-inbox no-result-icon"></i>
         <div class="no-result-title">Belum ada data</div>
         <div class="no-result-sub">Mulai input laporan kunjungan pada tab Input</div>
       </td></tr>`;
     } else {
-      tb.innerHTML = `<tr><td colspan="7" class="no-result-row">
+      tb.innerHTML = `<tr><td colspan="8" class="no-result-row">
         <i class="fas fa-search no-result-icon"></i>
         <div class="no-result-title">Data tidak ditemukan</div>
         <div class="no-result-sub">Coba ubah kata kunci atau hapus filter yang aktif</div>
@@ -2810,7 +2874,11 @@ function renderLog() {
     const shortLabel = shortJenis(d.jenis_ppks);
     const badgeHtml = `<span class="badge" title="${fullJenis}">${shortLabel}</span>`;
     const pendingBadge = d.pending ? `<span class="pending-badge"><i class="fas fa-cloud-upload-alt"></i> Pending</span>` : '';
-    return `<tr>
+    const isNonaktif = d.status_nonaktif === true;
+    const statusBtn = isNonaktif
+      ? `<button class="btn-status-nonaktif" onclick="toggleStatusPPKS(${idx})" title="Klik untuk aktifkan kembali"><i class="fas fa-ban"></i> Nonaktif</button>`
+      : `<button class="btn-status-aktif" onclick="toggleStatusPPKS(${idx})" title="Klik untuk nonaktifkan"><i class="fas fa-check-circle"></i> Aktif</button>`;
+    return `<tr class="${isNonaktif ? 'row-nonaktif' : ''}">
       <td>${tsHtml}</td>
       <td><strong style="color:var(--text);font-size:13px">${np}</strong>${pendingBadge}</td>
       <td><span style="font-size:12px;color:var(--text3)">${jab}</span></td>
@@ -2823,6 +2891,7 @@ function renderLog() {
       </td>
       <td>${badgeHtml}</td>
       <td><span style="font-size:12px;font-weight:600;color:var(--text2)">${d.kecamatan||'-'}</span></td>
+      <td>${statusBtn}</td>
       <td>
         <button class="btn-preview-row" onclick="openPreviewModal(${idx})">
           <i class="fas fa-eye"></i> Detail
@@ -2832,6 +2901,38 @@ function renderLog() {
   }).join('');
 
   renderPagination(total);
+}
+
+// ===== STATUS PPKS TOGGLE =====
+function toggleStatusPPKS(idx) {
+  const data = getLocalData();
+  if (!data[idx]) return;
+  const wasNonaktif = data[idx].status_nonaktif === true;
+  data[idx].status_nonaktif = !wasNonaktif;
+  saveLocalData(data);
+  renderLog();
+  updateInactiveBanner();
+  if (!wasNonaktif) {
+    showToast(`PPKS "${data[idx].nama_ppks || 'ini'}" dinonaktifkan`, true);
+  } else {
+    showToast(`PPKS "${data[idx].nama_ppks || 'ini'}" diaktifkan kembali`);
+  }
+}
+
+function updateInactiveBanner() {
+  const data = getLocalData();
+  const nonaktifList = data.filter(d => d.status_nonaktif === true);
+  const banner = document.getElementById('inactiveBanner');
+  const sub    = document.getElementById('inactiveBannerSub');
+  if (!banner) return;
+  if (nonaktifList.length > 0) {
+    const namaList = nonaktifList.slice(0, 5).map(d => `<strong>${d.nama_ppks || 'Tidak diketahui'}</strong>`).join(', ');
+    const more = nonaktifList.length > 5 ? ` dan ${nonaktifList.length - 5} lainnya` : '';
+    sub.innerHTML = `Terdapat <strong>${nonaktifList.length} PPKS</strong> yang telah dinonaktifkan: ${namaList}${more}. Mohon segera tindak lanjuti dan hapus data tersebut dari database.`;
+    banner.classList.add('visible');
+  } else {
+    banner.classList.remove('visible');
+  }
 }
 
 function renderPagination(total) {
