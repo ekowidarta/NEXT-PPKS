@@ -2055,28 +2055,6 @@ function clickNotifItem(id, nik){
   }, 350);
 }
 
-// ─── Cek duplikasi NIK secara inline saat petugas mengisi field NIK ──────────
-function checkNikDupInline(nik){
-  const hintEl = document.getElementById('nik_dup_hint');
-  if(!hintEl) return;
-  if(!nik || nik.length < 16){ hintEl.style.display='none'; return; }
-  const data = getLocalData();
-  const matches = data.filter(d => !d.status_nonaktif && (d.nik||'').trim() === nik);
-  if(matches.length === 0){ hintEl.style.display='none'; return; }
-  // Kumpulkan semua jenis PPKS yang sudah pernah diinput dengan NIK ini
-  const allJenis = [];
-  matches.forEach(m => {
-    (m.jenis_ppks||'').split(',').map(j=>j.trim()).filter(Boolean).forEach(j=>{
-      if(!allJenis.includes(j)) allJenis.push(j);
-    });
-  });
-  hintEl.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:#f59e0b;margin-right:6px"></i>`
-    + `<strong>Perhatian:</strong> NIK <strong>${nik}</strong> sudah pernah diinput `
-    + `dengan Jenis PPKS: <strong>${allJenis.join(', ')}</strong>. `
-    + `Pengisian dengan jenis PPKS yang sama akan ditolak sistem.`;
-  hintEl.style.display = 'block';
-}
-
 function markAllNotifRead(){
   const notifs = getNotifsStore();
   notifs.forEach(n => n.read = true);
@@ -2956,7 +2934,6 @@ function showConfirmModal(){
     nama_petugas: document.getElementById('f_nama_petugas').value,
     jabatan: document.getElementById('f_jabatan').value,
     nik: document.getElementById('f_nik').value.trim(),
-    no_kk: document.getElementById('f_no_kk').value.trim(),
     nama_ppks: document.getElementById('f_nama_ppks').value,
     jenis_kelamin: document.getElementById('f_jk').value,
     tgl_lahir: document.getElementById('f_tgl_lahir').value,
@@ -2994,7 +2971,6 @@ function showConfirmModal(){
     row('Nama Petugas', d.nama_petugas) +
     row('Jabatan', d.jabatan) +
     row('NIK PPKS', d.nik) +
-    row('Nomor Kartu Keluarga', d.no_kk || '—', false, true) +
     row('Nama Lengkap PPKS', d.nama_ppks) +
     row('Jenis Kelamin', d.jenis_kelamin) +
     row('Tanggal Lahir', d.tgl_lahir) +
@@ -3033,7 +3009,6 @@ async function doSendData(){
     nama_petugas:document.getElementById('f_nama_petugas').value,
     jabatan:document.getElementById('f_jabatan').value,
     nik:nik,
-    no_kk:document.getElementById('f_no_kk').value.trim(),
     nama_ppks:document.getElementById('f_nama_ppks').value,
     jenis_kelamin:document.getElementById('f_jk').value,
     tgl_lahir:document.getElementById('f_tgl_lahir').value,
@@ -3076,7 +3051,7 @@ async function doSendData(){
     return;
   }
   // ══════════════════════════════════════════════════════════════════════════
-  
+    
   // Simpan base64 sementara di sessionStorage (hanya sesi ini) untuk preview langsung
   const previewKey = 'nx_foto_preview_' + nik + '_' + safeTs;
   try {
@@ -3145,7 +3120,6 @@ async function doSendData(){
   // Kosongkan juga hasil & jenis ppks (full fields)
   document.getElementById('f_hasil').value='';
   document.getElementById('f_jenis_ppks').value='';
-  document.getElementById('f_no_kk').value='';
   const nikHint = document.getElementById('nik_dup_hint');
   if(nikHint) nikHint.style.display='none';
   setMSValue('f_jenis_ppks', '');
@@ -3978,10 +3952,10 @@ const DESA_LIST = [
   "Keban Agung","Kungkai Baru","Lawang Agung","Lokasi Baru","Lubuk Gilang",
   "Padang Pelasan","Pasar Ngalam","Suka Saja","Sukamaju","Sela Maras",
   "Tawang Rejo","Tedunan","Lubuk Semat","Talang Benuang","Talang Sebaris",
-  "Dusun Baru","Lubuk Kebur","Lubuk Lintang","Lubuk Sahung","Napal","Pasar Tais",
-  "Talang Dantuk","Puguk","Arang Sapat","Cawang","Gunung Agung","Tumbuan",
+  "Dusun Baru","Lubuk Kebur","Lubuk Lintang","Napal","Pasar Tais",
+  "Talang Dantuk","Puguk","Arang Sapat","Cawang","Gunung Agung",
   "Lubuk Terentang","Napal Jungur","Suka Maju","Suka Merindu","Talang Giring",
-  "Talang Kebun","Tanjung Agung","Dusun Tengah","Lubuk Sandi","Rena Panjang",
+  "Talang Kebun","Tanjung Agung","Dusun Tengah","Lubuk Sahung","Rena Panjang",
   "Teratai Mulya","Pindang Laya","Air Latak","Lubuk Lagan","Lunjuk","Purbosari",
   "Sengkuang Jaya","Talang Perapat","Talang Tinggi","Kunduran","Rawasari",
   "Tenangan","Bunga Mas","Selebar","Sembayat","Lubuk Resam","Pandan","Sekalak",
@@ -4006,7 +3980,7 @@ const DESA_LIST = [
   "Sukamiang","Talo Kecil","Tanjung Kening","Pulo Panggung","Sukarami",
   "Sengkuang","Talang Padang","Tangga Batu","Tebat Sibun","Lubuk Gio",
   "Pasar Seluma","Rimbo Kedui","Sido Mulyo","Tanjung Seluai","Padang Merbau",
-  "Sukabulan","Tanjungan","Seluma Timur","Tais"
+  "Sukabulan","Tanjungan","Seluma Timur","Tais","Tumbuan"
 ];
 
 function normalizeStr(s){
